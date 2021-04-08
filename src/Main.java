@@ -4,7 +4,7 @@ class HelloWorld {
 <<<<<<< HEAD
         System.out.println("Hello, World! from Ian");
 =======
-
+        System.out.println("Hello, World! from Varoujan");
 
         System.out.println("Hello, World!");
         System.out.println("My name is Colin");
