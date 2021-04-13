@@ -1,3 +1,5 @@
+import java.util.ArrayList; // import the ArrayList class
+
 public class Game
 {
     private GamePiece[] _pieces;   //array of GamePiece class
@@ -6,6 +8,10 @@ public class Game
     private int _player2UserID;
     private int _totalMoves;
     private int _winnerUserID;
+    
+    //element 0 & even numbers are old position, element 1 & odd numbers are new position
+    List<Int> _moveHistoryP1 = new ArrayList<Int>();
+    List<Int> _moveHistoryP2 = new ArrayList<Int>();
 
     public Game(int player1userid, int player2userid)
     {
@@ -161,6 +167,7 @@ public class Game
     {
         if (this._canMovePiece(piece, to_row, to_position))
         {
+            _updateMovesList(piece,to_row, to_position);
             piece._row = to_row;
             piece._position = to_position;
         }
@@ -189,5 +196,29 @@ public class Game
             return true;
         else
             return false;
+    }
+
+    private void _updateMovesList(Piece piece, int to_row, int to_position){
+        //called before pieces are moved & after move is deemed valid (INSIDE  
+        // ALSO, the format is old position, new position, old position, new positon etc.
+        
+        if(this._pieceIsPlayer1(piece)){
+            this._moveHistoryP1.add(_convertPosition(piece._row, piece._position));
+            this._moveHistoryP1.add(_convertPosition(to_row, to_position));
+            
+        }
+        else{
+            this._moveHistoryP2.add(_convertPosition(piece._row, piece._position));
+            this._moveHistoryP2.add(_convertPosition(to_row, to_position));
+        } 
+    }
+    private int _convertPosition(int row, int position){ 
+        //to make it look like wireframe outline
+        //Example:It will say 11-15 instead of Row8Column2 to Row4Column4
+        
+        if(row%2==0)
+            return (row*8) + (2*position) - 8;
+        else
+            return (row*8) + (2*position) - 9;
     }
 }
