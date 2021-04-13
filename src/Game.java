@@ -34,6 +34,7 @@ public class Game
         //We will define PLAYER 1 start position as the BOTTOM (rows 1-3)
         for (int i = 1; i <= 12; i++)
         {
+            this._pieces[i] = new GamePiece();
             this._pieces[i]._playerID = this._player1UserID;
 
             //integer division for the row
@@ -44,6 +45,7 @@ public class Game
         //We will define PLAYER 2 start position as the TOP (rows 6-8)
         for (int i = 13; i <= 24; i++)
         {
+            this._pieces[i] = new GamePiece();
             this._pieces[i]._playerID = this._player2UserID;
 
             //integer division for the row
