@@ -13,6 +13,8 @@ public class Main extends Application {
     public static final int WIDTH = 8;
     public static final int HEIGHT = 8;
 
+    private Game game = new Game(1,2);
+
     private Tile[][] board = new Tile[WIDTH][HEIGHT];
 
     private Group tileGroup = new Group(); //separate Group for tiles and pieces so pieces are on top of tiles
@@ -31,21 +33,19 @@ public class Main extends Application {
                 board[x][y] = tile; //filling our board up with tiles
 
                 tileGroup.getChildren().add(tile);
-
-                Piece piece = null;
-
-                if (y <= 2 && (x + y) % 2 != 0) { // This Displays the red pieces
-                    piece = makePiece((PieceType.RED), x, y);
-                }
-                if (y >= 5 && (x + y) % 2 != 0) { // This Displays the white pieces
-                    piece = makePiece((PieceType.White), x, y);
-                }
-                if(piece != null) {
-                    tile.setPiece(piece);
-                    pieceGroup.getChildren().add(piece);
+                for (int i = 0; i < game._pieces.length; i++) {
+                    tile.setPiece(game._pieces[i]);
                 }
             }
         }
+                for (int i = 0; i < game._pieces.length; i++) {
+                    if (game._pieces[i] != null) {
+                        pieceGroup.getChildren().add(game._pieces[i]);
+                    }
+                }
+
+
+
         return root;
     }
     @Override
@@ -58,7 +58,53 @@ public class Main extends Application {
     }
     public Piece makePiece (PieceType type,int x, int y){
         Piece piece = new Piece(type, x, y);
+       piece.setOnMouseReleased(e->{
+            int newX = toBoard(piece.getLayoutX());
+            int newY = toBoard(piece.getLayoutY());
+       });
         return piece;
+    }
+    public static Piece makePieceConvert(PieceType type,int row, int position){
+        int x = 0;
+        int y = Math.abs(row - 8);
+        if(row%2 == 1){
+            switch (position){
+                case 1:
+                    x = 0;
+                    break;
+                case 2:
+                    x = 2;
+                    break;
+                case 3:
+                    x = 4;
+                    break;
+                case 4:
+                    x = 6;
+                    break;
+            }
+        }
+        else{
+           switch (position){
+             case 1:
+                x = 1;
+                break;
+             case 2:
+                x = 3;
+                break;
+             case 3:
+                x = 5;
+                break;
+             case 4:
+                x = 7;
+                break;
+           }
+        }
+        Piece piece = new Piece(type, x, y);
+
+        return piece;
+    }
+    private int toBoard(double pixel){
+        return (int)(pixel + TILE_SIZE / 2) / TILE_SIZE;
     }
 
     public static void main (String[]args){

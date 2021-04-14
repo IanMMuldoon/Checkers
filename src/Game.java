@@ -1,6 +1,6 @@
 public class Game
 {
-    private GamePiece[] _pieces;   //array of GamePiece class
+    public Piece[] _pieces;   //array of Piece class
     private int _gameID;
     private int _player1UserID;
     private int _player2UserID;
@@ -26,7 +26,7 @@ public class Game
         this._winnerUserID = 0;
 
         //Set up the pieces (maybe this can be two arrays? player 1 pieces/player 2 pieces?
-        this._pieces = new GamePiece[24];
+        this._pieces = new Piece[24];
 
         //We will define ROWS as 1-8
         //And POSITIONS on those rows as 1-4
@@ -34,22 +34,27 @@ public class Game
         //We will define PLAYER 1 start position as the BOTTOM (rows 1-3)
         for (int i = 1; i <= 12; i++)
         {
-            this._pieces[i]._playerID = this._player1UserID;
+            this._pieces[i] = new Piece();
 
+            this._pieces[i]._playerID = this._player1UserID;
             //integer division for the row
             this._pieces[i]._row = (i + 3) / 4;
             this._pieces[i]._position = (i - (this._pieces[i]._row-1)*4);
+
+            this._pieces[i] = Main.makePieceConvert(PieceType.White, _pieces[i]._row, _pieces[i]._position);
         }
 
         //We will define PLAYER 2 start position as the TOP (rows 6-8)
-        for (int i = 13; i <= 24; i++)
+        for (int i = 13; i < 24; i++)
         {
-            this._pieces[i]._playerID = this._player2UserID;
+            this._pieces[i] = new Piece();
 
+            this._pieces[i]._playerID = this._player2UserID;
             //integer division for the row
             this._pieces[i]._row = ((i + 3) / 4) + 2; //skipping two rows
             this._pieces[i]._position = (i-12) - (this._pieces[i]._row-6)*4;
 
+            this._pieces[i] = Main.makePieceConvert(PieceType.RED, _pieces[i]._row, _pieces[i]._position);
 //How the position formula works
 //            @i = 1: 1 - (1-1)*4 = 1
 //            @i = 11: 11 - (3-1)*4 = 11-8 = 3
@@ -60,7 +65,9 @@ public class Game
         }
     }
 
-    public boolean _canMovePiece(GamePiece piece, int to_row, int to_position)
+
+
+    public boolean _canMovePiece(Piece piece, int to_row, int to_position)
     {
         //Determine if this is a valid position
         boolean can_move = false;
@@ -145,7 +152,7 @@ public class Game
     {
         boolean has_piece = false;
 
-        for (GamePiece piece: this._pieces)
+        for (Piece piece: this._pieces)
         {
             if (piece._row == row && piece._position == position)
             {
@@ -157,7 +164,7 @@ public class Game
         return has_piece;
     }
 
-    public boolean _movePiece(GamePiece piece, int to_row, int to_position)
+    public boolean _movePiece(Piece piece, int to_row, int to_position)
     {
         if (this._canMovePiece(piece, to_row, to_position))
         {
@@ -172,7 +179,7 @@ public class Game
         return true;
     }
 
-    public void _kingPiece(GamePiece piece)
+    public void _kingPiece(Piece piece)
     {
         if (piece._isKing)
             return;
@@ -183,7 +190,7 @@ public class Game
             piece._isKing = true;
     }
 
-    private boolean _pieceIsPlayer1(GamePiece piece)
+    private boolean _pieceIsPlayer1(Piece piece)
     {
         if (piece._playerID == this._player1UserID)
             return true;
