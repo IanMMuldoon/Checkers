@@ -45,7 +45,7 @@ public class Game
         }
 
         //We will define PLAYER 2 start position as the TOP (rows 6-8)
-        for (int i = 13; i < 24; i++)
+        for (int i = 13; i <= 24; i++)
         {
             this._pieces[i] = new Piece();
             this._pieces[i].type = PieceType.White;
