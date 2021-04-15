@@ -185,6 +185,19 @@ public class Game
 
         return true;
     }
+    public boolean _proposedTakeback(){ 
+        int _tempRow;
+        int _tempPos;
+
+        if(this._moveHistoryP1.size() > this._moveHistoryP2.size()){
+            //player2s turn, player 1 just went
+            this._totalMoves--;
+            this
+        }
+        else{
+
+        }
+    }
 
     public void _kingPiece(GamePiece piece)
     {
@@ -222,11 +235,20 @@ public class Game
     private int _convertPosition(int row, int position){ 
         //to make it look like wireframe outline
         //Example:It will say 11-15 instead of Row8Column2 to Row4Column4
-        
+        /*
         if(row%2==0)
             return (row*8) + (2*position) - 8;
         else
-            return (row*8) + (2*position) - 9;
+            return (row*8) + (2*position) - 9;*/
+        int i = 1;
+        int temp = position;
+
+        while (i<row){
+            temp +=4;
+            i++;
+        }
+
+        return temp;
     }
     private void _updateMovesBoard{
         int j,k;
