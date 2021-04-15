@@ -13,6 +13,9 @@ public class Main extends Application {
     public static final int WIDTH = 8;
     public static final int HEIGHT = 8;
 
+    private Game game = new Game(1,2);
+
+
     private Tile[][] board = new Tile[WIDTH][HEIGHT];
 
     private Group tileGroup = new Group(); //separate Group for tiles and pieces so pieces are on top of tiles
@@ -31,21 +34,21 @@ public class Main extends Application {
                 board[x][y] = tile; //filling our board up with tiles
 
                 tileGroup.getChildren().add(tile);
-
-                Piece piece = null;
-
-                if (y <= 2 && (x + y) % 2 != 0) { // This Displays the red pieces
-                    piece = makePiece((PieceType.RED), x, y);
-                }
-                if (y >= 5 && (x + y) % 2 != 0) { // This Displays the white pieces
-                    piece = makePiece((PieceType.White), x, y);
-                }
-                if(piece != null) {
-                    tile.setPiece(piece);
-                    pieceGroup.getChildren().add(piece);
+                for (int i = 0; i < game._pieces.length; i++) {
+                    tile.setPiece(game._pieces[i]);
                 }
             }
         }
+
+                for (int i = 0; i < game._pieces.length; i++) {
+                    if (game._pieces[i] != null) {
+                        game._pieces[i].Draw();
+                        pieceGroup.getChildren().add(game._pieces[i]);
+                    }
+                }
+
+
+
         return root;
     }
     @Override
@@ -56,9 +59,9 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-    public Piece makePiece (PieceType type,int x, int y){
-        Piece piece = new Piece(type, x, y);
-        return piece;
+
+    private int toBoard(double pixel){
+        return (int)(pixel + TILE_SIZE / 2) / TILE_SIZE;
     }
 
     public static void main (String[]args){
