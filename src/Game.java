@@ -230,14 +230,19 @@ public class Game
     }
     private void _updateMovesBoard{
         //called after peices are moved
-        if(this._totalMoves%2 == 1){ //player 1 just finished
-                this._moveBoardP1[0][((this._totalMoves+1)/2)-1] = this._moveHistoryP1.get(this._moveHistoryP1.size()-2);
-                this._moveBoardP1[1][((this._totalMoves+1)/2)-1] = this._moveHistoryP1.get(this._moveHistoryP1.size()-1);
-            }
-            else{
-                this._moveBoardP2[0][(this._totalMoves/2)-1] = this._moveHistoryP2.get(this._moveHistoryP2.size()-2);
-                this._moveBoardP2[1][(this._totalMoves/2)-1] = this._moveHistoryP2.get(this._moveHistoryP2.size()-1);
-            }
+        if(this._totalMoves<= this.MAX_MOVES_SHOWN*2){
+            if(this._totalMoves%2 == 1){ //player 1 just finished
+                    this._moveBoardP1[0][((this._totalMoves+1)/2)-1] = 
+                        this._moveHistoryP1.get(this._moveHistoryP1.size()-2);
+                    this._moveBoardP1[1][((this._totalMoves+1)/2)-1] = 
+                        this._moveHistoryP1.get(this._moveHistoryP1.size()-1);
+             }
+             else{
+                    this._moveBoardP2[0][(this._totalMoves/2)-1] = 
+                        this._moveHistoryP2.get(this._moveHistoryP2.size()-2);
+                    this._moveBoardP2[1][(this._totalMoves/2)-1] = 
+                        this._moveHistoryP2.get(this._moveHistoryP2.size()-1);
+                }
         }
         else{ // if one or both players are on their 11th turn, meaning we need to refresh MovesList
             j =  this._moveHistoryP1.size() - this.MAX_MOVES_SHOWN;
