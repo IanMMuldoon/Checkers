@@ -9,11 +9,13 @@ public class Piece extends StackPane {
     public int _row;
     public int _position;
     public boolean _isKing = false;
+    public int x, y;
+
 
     private double mouseX, mouseY;
     private double oldX, oldY;
 
-    private PieceType type;
+    public PieceType type;
 
     public Piece(){
         this._position = 0;
@@ -22,10 +24,11 @@ public class Piece extends StackPane {
         this._isKing = false;
     }
 
-    public Piece(PieceType type, int x, int y) { //Takes the piece type and board coordinates
-        this.type = type;
+    public void Draw() { //Takes the piece type and board coordinates
 
-        move(x , y );
+
+        Position position = Position.getPiecePosition(this);
+        move(position._x , position._y );
 
         Ellipse circle = new Ellipse(Main.TILE_SIZE * 0.3125, Main.TILE_SIZE * 0.26);
         if (type == PieceType.RED) {  //Depending on type, fill circle red or white

@@ -15,6 +15,7 @@ public class Main extends Application {
 
     private Game game = new Game(1,2);
 
+
     private Tile[][] board = new Tile[WIDTH][HEIGHT];
 
     private Group tileGroup = new Group(); //separate Group for tiles and pieces so pieces are on top of tiles
@@ -38,8 +39,10 @@ public class Main extends Application {
                 }
             }
         }
+
                 for (int i = 0; i < game._pieces.length; i++) {
                     if (game._pieces[i] != null) {
+                        game._pieces[i].Draw();
                         pieceGroup.getChildren().add(game._pieces[i]);
                     }
                 }
@@ -56,53 +59,7 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-    public Piece makePiece (PieceType type,int x, int y){
-        Piece piece = new Piece(type, x, y);
-       piece.setOnMouseReleased(e->{
-            int newX = toBoard(piece.getLayoutX());
-            int newY = toBoard(piece.getLayoutY());
-       });
-        return piece;
-    }
-    public static Piece makePieceConvert(PieceType type,int row, int position){
-        int x = 0;
-        int y = Math.abs(row - 8);
-        if(row%2 == 1){
-            switch (position){
-                case 1:
-                    x = 0;
-                    break;
-                case 2:
-                    x = 2;
-                    break;
-                case 3:
-                    x = 4;
-                    break;
-                case 4:
-                    x = 6;
-                    break;
-            }
-        }
-        else{
-           switch (position){
-             case 1:
-                x = 1;
-                break;
-             case 2:
-                x = 3;
-                break;
-             case 3:
-                x = 5;
-                break;
-             case 4:
-                x = 7;
-                break;
-           }
-        }
-        Piece piece = new Piece(type, x, y);
 
-        return piece;
-    }
     private int toBoard(double pixel){
         return (int)(pixel + TILE_SIZE / 2) / TILE_SIZE;
     }

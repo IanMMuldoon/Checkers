@@ -26,7 +26,7 @@ public class Game
         this._winnerUserID = 0;
 
         //Set up the pieces (maybe this can be two arrays? player 1 pieces/player 2 pieces?
-        this._pieces = new Piece[24];
+        this._pieces = new Piece[25];
 
         //We will define ROWS as 1-8
         //And POSITIONS on those rows as 1-4
@@ -34,27 +34,27 @@ public class Game
         //We will define PLAYER 1 start position as the BOTTOM (rows 1-3)
         for (int i = 1; i <= 12; i++)
         {
-            this._pieces[i] = new Piece();
 
+            this._pieces[i] = new Piece();
+            this._pieces[i].type = PieceType.RED;
             this._pieces[i]._playerID = this._player1UserID;
             //integer division for the row
             this._pieces[i]._row = (i + 3) / 4;
             this._pieces[i]._position = (i - (this._pieces[i]._row-1)*4);
 
-            this._pieces[i] = Main.makePieceConvert(PieceType.White, _pieces[i]._row, _pieces[i]._position);
         }
 
         //We will define PLAYER 2 start position as the TOP (rows 6-8)
         for (int i = 13; i < 24; i++)
         {
             this._pieces[i] = new Piece();
-
+            this._pieces[i].type = PieceType.White;
             this._pieces[i]._playerID = this._player2UserID;
             //integer division for the row
             this._pieces[i]._row = ((i + 3) / 4) + 2; //skipping two rows
             this._pieces[i]._position = (i-12) - (this._pieces[i]._row-6)*4;
 
-            this._pieces[i] = Main.makePieceConvert(PieceType.RED, _pieces[i]._row, _pieces[i]._position);
+
 //How the position formula works
 //            @i = 1: 1 - (1-1)*4 = 1
 //            @i = 11: 11 - (3-1)*4 = 11-8 = 3
