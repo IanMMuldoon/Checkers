@@ -186,16 +186,46 @@ public class Game
         return true;
     }
     public boolean _proposedTakeback(){ 
-        int _tempRow;
-        int _tempPos;
+
+        int to_row =1;
+        int from_row= 1;
+        int to_position, from_position;
 
         if(this._moveHistoryP1.size() > this._moveHistoryP2.size()){
             //player2s turn, player 1 just went
-            this._totalMoves--;
-            this
+            to_position = this._moveHistoryP1.get(this._moveHistoryP1.size()-2);
+            from_position = this._moveHistoryP1.get(this._moveHistoryP1.size()-1);
         }
-        else{
+        else{ //otherwise its player 1s turn bc player 2 just went
+            to_position = this._moveHistoryP2.get(this._moveHistoryP2.size()-2);
+            from_position = this._moveHistoryP2.get(this._moveHistoryP2.size()-1);
+        }
 
+        //findPoisition
+        while(to_position!= 1 || to_position!= 2|| to_position!=3 || to_position != 4){
+            to_position -= 4;
+            to_row++;
+        }
+        while(from_position!= 1 || from_position!= 2|| from_position!=3 || from_position != 4){
+            from_position -= 4;
+            from_row++;
+        }
+
+        for(Piece piece: this._pieces){
+            if (piece._row == from_row && piece._position == from_position){
+                piece._row = to_row;
+                piece._position = to_position;
+                
+                _this.totalMoves--;
+                if(this._pieceIsPlayer1(piece)){
+                    this._movesHistoryP1.remove(this._movedHistoryP1.size()-1);
+                    this._movesHistoryP1.remove(this._movedHistoryP1.size()-2);
+                }
+                else{
+                    this._movesHistoryP1.remove(this._movedHistoryP1.size()-1);
+                    this._movesHistoryP1.remove(this._movedHistoryP1.size()-2);
+                }
+            }
         }
     }
 
@@ -250,7 +280,7 @@ public class Game
 
         return temp;
     }
-    private void _updateMovesBoard{
+    private void _updateMovesBoard(){
         int j,k;
         //called after peices are moved
         if(this._totalMoves<= this.MAX_MOVES_SHOWN*2){
@@ -268,15 +298,17 @@ public class Game
                 }
         }
         else{ // if one or both players are on their 11th turn, meaning we need to refresh MovesList
-            j =  this._moveHistoryP1.size() - this.MAX_MOVES_SHOWN;
-            k =  this._moveHistoryP2.size() - this.MAX_MOVES_SHOWN;
+            j =  this._moveHistoryP1.size() - (this.MAX_MOVES_SHOWN*2);
+            k =  this._moveHistoryP2.size() - (this.MAX_MOVES_SHOWN*2);
 
             for(int i=0; i < this.MAX_MOVES_SHOWN; i++ ){
-                this._moveBoardP1[0][i] = this._moveHistoryP1.get(j+i);
-                this._moveBoardP1[1][i] = this._moveHistoryP1.get(j+i);
+                this._moveBoardP1[0][i] = this._moveHistoryP1.get(j);
+                this._moveBoardP1[1][i] = this._moveHistoryP1.get(j+1);
 
-                this._moveBoardP2[0][i] = this._moveHistoryP2.get(k+i);
+                this._moveBoardP2[0][i] = this._moveHistoryP2.get(k);
                 this._moveBoardP2[1][i] = this._moveHistoryP2.get(k+i);
+
+                j +=2;
             }
         }
 
