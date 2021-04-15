@@ -9,9 +9,15 @@ public class Game
     private int _totalMoves;
     private int _winnerUserID;
     
+    //List of Moves
     //element 0 & even numbers are old position, element 1 & odd numbers are new position
     List<Int> _moveHistoryP1 = new ArrayList<Int>();
     List<Int> _moveHistoryP2 = new ArrayList<Int>();
+
+    //Move Board
+    private final int MAX_MOVES_SHOWN = 10;
+    private int[][] _movesBoardP1 = new int[2][MAX_MOVES_SHOWN]; //OLD Position + new Positon
+    private int[][] _movesBoardP2 = new int[2][MAX_MOVES_SHOWN];
 
     public Game(int player1userid, int player2userid)
     {
@@ -170,6 +176,7 @@ public class Game
             _updateMovesList(piece,to_row, to_position);
             piece._row = to_row;
             piece._position = to_position;
+            _totalMoves++;
         }
 
         //TODO: logic for if a piece was captured
@@ -220,5 +227,30 @@ public class Game
             return (row*8) + (2*position) - 8;
         else
             return (row*8) + (2*position) - 9;
+    }
+    private void _updateMovesBoard{
+        //called after peices are moved
+        if(this._totalMoves%2 == 1){ //player 1 just finished
+                this._moveBoardP1[0][((this._totalMoves+1)/2)-1] = this._moveHistoryP1.get(this._moveHistoryP1.size()-2);
+                this._moveBoardP1[1][((this._totalMoves+1)/2)-1] = this._moveHistoryP1.get(this._moveHistoryP1.size()-1);
+            }
+            else{
+                this._moveBoardP2[0][(this._totalMoves/2)-1] = this._moveHistoryP2.get(this._moveHistoryP2.size()-2);
+                this._moveBoardP2[1][(this._totalMoves/2)-1] = this._moveHistoryP2.get(this._moveHistoryP2.size()-1);
+            }
+        }
+        else{ // if one or both players are on their 11th turn, meaning we need to refresh MovesList
+            j =  this._moveHistoryP1.size() - this.MAX_MOVES_SHOWN;
+            k =  this._moveHistoryP2.size() - this.MAX_MOVES_SHOWN;
+
+            for(int i=0; i < this.MAX_MOVES_SHOWN; i++ ){
+                this._moveBoardP1[0][i] = this._moveHistoryP1.get(j+i);
+                this._moveBoardP1[1][i] = this._moveHistoryP1.get(j+i);
+
+                this._moveBoardP2[0][i] = this._moveHistoryP2.get(k+i);
+                this._moveBoardP2[1][i] = this._moveHistoryP2.get(k+i);
+            }
+        }
+
     }
 }
