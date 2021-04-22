@@ -15,9 +15,6 @@ public class Main extends Application {
 
     private Game game = new Game(1,2);
 
-
-    private Tile[][] board = new Tile[WIDTH][HEIGHT];
-
     private Group tileGroup = new Group(); //separate Group for tiles and pieces so pieces are on top of tiles
     private Group pieceGroup = new Group();
 
@@ -26,12 +23,17 @@ public class Main extends Application {
         root.setPrefSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
         root.getChildren().addAll(tileGroup, pieceGroup);
 
+        DrawTiles();
+        DrawPieces();
 
+        return root;
+    }
+    public void DrawTiles(){
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
                 Tile tile = new Tile((x + y) % 2 == 0, x, y); //If the sum or the coordinates is even then the tile is light
 
-                board[x][y] = tile; //filling our board up with tiles
+                game.board[x][y] = tile;
 
                 tileGroup.getChildren().add(tile);
                 for (int i = 0; i < game._pieces.length; i++) {
@@ -39,18 +41,17 @@ public class Main extends Application {
                 }
             }
         }
-
-                for (int i = 0; i < game._pieces.length; i++) {
-                    if (game._pieces[i] != null) {
-                        game._pieces[i].Draw();
-                        pieceGroup.getChildren().add(game._pieces[i]);
-                    }
-                }
-
-
-
-        return root;
     }
+    public void DrawPieces(){
+        for (int i = 0; i < game._pieces.length; i++) {
+            if (game._pieces[i] != null) {
+                game._pieces[i].DrawCircle();
+                pieceGroup.getChildren().add(game._pieces[i]);
+            }
+
+        }
+    }
+
     @Override
     public void start (Stage primaryStage) throws Exception {
         //Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
