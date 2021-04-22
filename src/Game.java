@@ -1,5 +1,10 @@
+// Pushed at 7:24 4/21/21
 public class Game
 {
+    public static final int TILE_SIZE = 100;
+    public static final int WIDTH = 8;
+    public static final int HEIGHT = 8;
+    public Tile[][] board = new Tile[WIDTH][HEIGHT];
     public Piece[] _pieces;   //array of Piece class
     private int _gameID;
     private int _player1UserID;
@@ -20,6 +25,30 @@ public class Game
     public int _getPlayer2UserID() { return this._player2UserID; }
     public int _getTotalMoves() { return this._totalMoves; }
     public int _getWinnerUserID() { return this._winnerUserID; }
+
+    private Piece makePiece(){
+        Piece piece = new Piece();
+
+
+        piece.setOnMouseReleased(e->{
+            int newX = toBoard(piece.getLayoutX());
+            int newY = toBoard(piece.getLayoutY());
+
+            int x0 = toBoard(piece.getOldX());
+            int y0 = toBoard(piece.getOldY());
+
+            Position convert = Position.getPieceRP(newX, newY);
+
+            //   _movePiece(piece, convert.row, convert.position);
+            piece.move(newX, newY);
+            board[x0][y0].setPiece(null);
+            board[newX][newY].setPiece(piece);
+
+            //}
+
+        });
+        return piece;
+    }
     public void _reset()
     {
         this._totalMoves = 0;
@@ -35,7 +64,7 @@ public class Game
         for (int i = 1; i <= 12; i++)
         {
 
-            this._pieces[i] = new Piece();
+            this._pieces[i] = makePiece();
             this._pieces[i].type = PieceType.RED;
             this._pieces[i]._playerID = this._player1UserID;
             //integer division for the row
@@ -47,7 +76,7 @@ public class Game
         //We will define PLAYER 2 start position as the TOP (rows 6-8)
         for (int i = 13; i <= 24; i++)
         {
-            this._pieces[i] = new Piece();
+            this._pieces[i] = makePiece();
             this._pieces[i].type = PieceType.White;
             this._pieces[i]._playerID = this._player2UserID;
             //integer division for the row
@@ -170,6 +199,7 @@ public class Game
         {
             piece._row = to_row;
             piece._position = to_position;
+
         }
 
         //TODO: logic for if a piece was captured
@@ -196,5 +226,8 @@ public class Game
             return true;
         else
             return false;
+    }
+    private int toBoard(double pixel){
+        return (int)(pixel + TILE_SIZE / 2) / TILE_SIZE;
     }
 }

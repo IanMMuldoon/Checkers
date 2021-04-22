@@ -24,10 +24,10 @@ public class Piece extends StackPane {
         this._isKing = false;
     }
 
-    public void Draw() { //Takes the piece type and board coordinates
+    public void DrawCircle() {
 
 
-        Position position = Position.getPiecePosition(this);
+        Position position = Position.getPieceXY(this);
         move(position._x , position._y );
 
         Ellipse circle = new Ellipse(Main.TILE_SIZE * 0.3125, Main.TILE_SIZE * 0.26);
@@ -47,10 +47,10 @@ public class Piece extends StackPane {
         });
 
 
-    setOnMouseDragged(e->{
-        relocate(e.getSceneX() - mouseX + oldX, e.getSceneY() - mouseY + oldY);
-    });
-}
+        setOnMouseDragged(e->{
+            relocate(e.getSceneX() - mouseX + oldX, e.getSceneY() - mouseY + oldY);
+        });
+    }
 
     public void move(int x, int y){
         oldX = x * Main.TILE_SIZE;
