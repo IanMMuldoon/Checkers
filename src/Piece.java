@@ -11,58 +11,50 @@ public class Piece extends StackPane {
     public boolean _isKing = false;
     public int x, y;
 
+    public boolean _isDragging;
 
-    private double mouseX, mouseY;
-    private double oldX, oldY;
+    public double mouseX, mouseY;
+    public double oldX, oldY;
 
     public PieceType type;
 
-    public Piece(){
+    public Piece()
+    {
         this._position = 0;
         this._row = 0;
         this._playerID = 0;
         this._isKing = false;
     }
 
-    public void DrawCircle() {
-
-
+    public void CreateCircle()
+    {
         Position position = Position.getPieceXY(this);
         move(position._x , position._y );
 
         Ellipse circle = new Ellipse(Main.TILE_SIZE * 0.3125, Main.TILE_SIZE * 0.26);
-        if (type == PieceType.RED) {  //Depending on type, fill circle red or white
+        if (type == PieceType.RED)   //Depending on type, fill circle red or white
             circle.setFill(Color.RED);
-
-        } else {
+        else
             circle.setFill(Color.WHITE);
-        }
+
         circle.setTranslateX((Main.TILE_SIZE - Main.TILE_SIZE * 0.3125 * 2) / 2);
         circle.setTranslateY((Main.TILE_SIZE - Main.TILE_SIZE * 0.26 * 2) / 2);
-        getChildren().addAll(circle);
 
-        setOnMousePressed(e -> {
-            mouseX = e.getSceneX();
-            mouseY = e.getSceneY();
-        });
-
-
-        setOnMouseDragged(e->{
-            relocate(e.getSceneX() - mouseX + oldX, e.getSceneY() - mouseY + oldY);
-        });
+        this.getChildren().addAll(circle);
     }
 
-    public void move(int x, int y){
+    public void move(int x, int y)
+    {
         oldX = x * Main.TILE_SIZE;
         oldY = y * Main.TILE_SIZE;
         relocate(oldX, oldY);
     }
-    public int getPlayerID() {
-
+    public int getPlayerID()
+    {
         return _playerID;
     }
-    public int getPosition(){
-
+    public int getPosition()
+    {
         return _position;
     }
     public double getOldX(){
