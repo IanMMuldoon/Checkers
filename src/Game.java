@@ -1,4 +1,3 @@
-// Pushed at 7:24 4/21/21
 public class Game
 {
     public static final int TILE_SIZE = 100;
@@ -11,6 +10,7 @@ public class Game
     private int _player2UserID;
     private int _totalMoves;
     private int _winnerUserID;
+    private int _currentPlayerID;
 
     public Game(int player1userid, int player2userid)
     {
@@ -25,6 +25,7 @@ public class Game
     public int _getPlayer2UserID() { return this._player2UserID; }
     public int _getTotalMoves() { return this._totalMoves; }
     public int _getWinnerUserID() { return this._winnerUserID; }
+    public int _getCurrentPlayerID() { return this._currentPlayerID; }
 
     private Piece makePiece(){
         Piece piece = new Piece();
@@ -37,22 +38,33 @@ public class Game
             int x0 = toBoard(piece.getOldX());
             int y0 = toBoard(piece.getOldY());
 
-            Position convert = Position.getPieceRP(newX, newY);
+            Position convert = Position.getPieceRP(newX, newY, 0);
 
-            //   _movePiece(piece, convert.row, convert.position);
-            piece.move(newX, newY);
-            board[x0][y0].setPiece(null);
-            board[newX][newY].setPiece(piece);
+            if (!convert._isValid || !_movePiece(piece, convert._row, convert._position)){
+                piece.move(x0, y0);
+            }
+
+            /*if(convert._isValid || ) {
+                _movePiece(piece, convert._row, convert._position);
+            }
+            else{
+                piece.move(x0,y0);
+            }*/
+            //piece.move(newX, newY);
+           /* board[x0][y0].setPiece(null);
+            board[newX][newY].setPiece(piece);*/
 
             //}
 
         });
         return piece;
     }
+
     public void _reset()
     {
         this._totalMoves = 0;
         this._winnerUserID = 0;
+        this._currentPlayerID = this._player1UserID;
 
         //Set up the pieces (maybe this can be two arrays? player 1 pieces/player 2 pieces?
         this._pieces = new Piece[25];
@@ -94,12 +106,13 @@ public class Game
         }
     }
 
-
+    private Piece _pieceToCapture = null;
 
     public boolean _canMovePiece(Piece piece, int to_row, int to_position)
     {
         //Determine if this is a valid position
         boolean can_move = false;
+        this._pieceToCapture = null;
 
         //First check if there is a piece there
         if (_squareHasPiece(to_row, to_position))
@@ -107,106 +120,141 @@ public class Game
 
         if (piece._isKing)
         {
-
+            //King pieces
         }
         else
         {
             //regular pieces
-            if (this._pieceIsPlayer1(piece))
-            {
-                //player 1 regular pieces move UP
 
-                //check if moving or jumping
-                if (to_row == (piece._row + 1))
+            //player 1 regular pieces move UP = 1, Player 2 regular pieces move DOWN = -1
+            int directionmodifier = 1;
+            if (!this._pieceIsPlayer1(piece))
+                directionmodifier = -1;
+
+            //check if moving or jumping
+            if (to_row == (piece._row + directionmodifier))
+            {
+                //Moving
+                if (piece._row %2 == 0 //Even rows move LEFT 0 or RIGHT 1
+                        && (to_position == piece._position || to_position == (piece._position + 1 )))
                 {
-                    //Moving
-                    if (piece._row %2 == 0 //Even rows move LEFT 0 or RIGHT 1
-                            && (to_position == piece._position || to_position == (piece._position + 1 )))
-                    {
-                        can_move = true;
-                    }
-//                    else
-//                        can_move = false;
+                    can_move = true;
                 }
-                else if (to_row == (piece._row + 2))
+                else if (piece._row %2 == 1 //Odd rows move LEFT 1 or RIGHT 0
+                        && (to_position == (piece._position + 1) || to_position == piece._position))
                 {
-                    //Jumping
-                    if (piece._row %2 == 0 //Even rows move LEFT 1 or RIGHT 1
-                            && (to_position == (piece._position - 1) || to_position == (piece._position + 1 )))
-                    {
-                        can_move = true;
-                    }
-//                    else
-//                        can_move = false;
+                    can_move = true;
                 }
-//                else
-//                    can_move = false;
             }
-            else
+            else if (to_row == (piece._row + 2 * directionmodifier))
             {
-                //player 2 regular pieces move DOWN
+                //Jumping
+                //Involves two rows, and above Moving logic * 2 results in same logic for Odd and even rows
+                if (to_position == (piece._position - 1) || to_position == (piece._position + 1 ))
+                {
+                    //jumped position depends on row chirality
+                    int jumpedposition = 0;
+                    if (piece._row %2 == 0 && to_position < piece._position) //Jumping LEFT from EVEN row
+                        jumpedposition = piece._position;
+                    else if (piece._row %2 == 1 && to_position < piece._position) //Jumping LEFT from ODD row
+                        jumpedposition = piece._position - 1;
+                    else if (piece._row %2 == 0 && to_position > piece._position) //Jumping RIGHT from EVEN row
+                        jumpedposition = piece._position + 1;
+                    else if (piece._row %2 == 1 && to_position > piece._position) //Jumping RIGHT from ODD row
+                        jumpedposition = piece._position;
 
-                //check if moving or jumping
-                if (to_row == (piece._row - 1))
-                {
-                    //Moving
-                    if (piece._row %2 == 0 //Even rows move LEFT 0 or RIGHT 1
-                            && (to_position == piece._position || to_position == (piece._position + 1 )))
+                    //Check that the space inbetween from and to has an opponent piece
+                    Piece jumpedpiece = this._getSquarePiece(piece._row + directionmodifier, jumpedposition);
+                    if  (jumpedpiece != null && jumpedpiece._playerID != piece._playerID)
                     {
                         can_move = true;
+                        this._pieceToCapture = jumpedpiece;
                     }
-//                    else
-//                        can_move = false;
                 }
-                else if (to_row == (piece._row - 2))
-                {
-                    //Jumping
-                    if (piece._row %2 == 0 //Even rows move LEFT 1 or RIGHT 1
-                            && (to_position == (piece._position - 1) || to_position == (piece._position + 1 )))
-                    {
-                        can_move = true;
-                    }
-//                    else
-//                        can_move = false;
-                }
-//                else
-//                    can_move = false;
             }
         }
 
         return can_move;
     }
 
-    private boolean _squareHasPiece(int row, int position)
+    private Piece _getSquarePiece(int row, int position)
     {
-        boolean has_piece = false;
+        Piece foundpiece = null;
 
         for (Piece piece: this._pieces)
         {
-            if (piece._row == row && piece._position == position)
-            {
-                has_piece = true;
-                break;
+            if(piece != null) {
+                if (piece._row == row && piece._position == position) {
+                    foundpiece = piece;
+                    break;
+                }
             }
         }
 
-        return has_piece;
+        return foundpiece;
     }
+
+    private boolean _squareHasPiece(int row, int position)
+    {
+        return (this._getSquarePiece(row, position) != null);
+    }
+
+    private boolean _mustJumpAgain = false;
+    public boolean getMustJumpAgain() { return this._mustJumpAgain; }
 
     public boolean _movePiece(Piece piece, int to_row, int to_position)
     {
+        boolean moved = false;
+
         if (this._canMovePiece(piece, to_row, to_position))
         {
             piece._row = to_row;
             piece._position = to_position;
 
+            Position convert = Position.getPieceXY(piece);
+            piece.move(convert._x, convert._y);
+
+            //Check if a piece was captured
+            if (this._pieceToCapture != null) {
+                //Remove the captured piece
+                Piece[] newlist = new Piece[this._pieces.length - 1];
+                int i = 0;
+                for (Piece piecetocopy : this._pieces) {
+                    if (piecetocopy != this._pieceToCapture)
+                        newlist[i++] = piecetocopy;
+                    else
+                        piecetocopy = null;
+                }
+
+                this._pieces = newlist;
+                this._pieceToCapture = null;
+
+                //player 1 regular pieces move UP = 1, Player 2 regular pieces move DOWN = -1
+                int directionmodifier = 1;
+                if (!this._pieceIsPlayer1(piece))
+                    directionmodifier = -1;
+
+                //return true if must jump again
+                //check if the piece is allowed to make another jump left or right
+                this._mustJumpAgain = (this._canMovePiece(piece, piece._row + 2 * directionmodifier, piece._position - 1)
+                        || this._canMovePiece(piece, piece._row + 2 * directionmodifier, piece._position + 1));
+            }
+
+            if (!this._mustJumpAgain)
+                this._toggleCurrentPlayer();
+
+            moved = true;
         }
 
-        //TODO: logic for if a piece was captured
+        return moved;
+    }
 
-        //TODO: return true if must jump again? (or maybe return an enum?)
-
-        return true;
+    private void _toggleCurrentPlayer()
+    {
+        if (this._currentPlayerID == this._player1UserID)
+            this._currentPlayerID = this._player2UserID;
+        else
+            this._currentPlayerID = this._player1UserID;
     }
 
     public void _kingPiece(Piece piece)

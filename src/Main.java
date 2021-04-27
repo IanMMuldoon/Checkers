@@ -45,7 +45,7 @@ public class Main extends Application {
     public void DrawPieces(){
         for (int i = 0; i < game._pieces.length; i++) {
             if (game._pieces[i] != null) {
-                game._pieces[i].DrawCircle();
+                game._pieces[i].CreateCircle();
                 pieceGroup.getChildren().add(game._pieces[i]);
             }
 

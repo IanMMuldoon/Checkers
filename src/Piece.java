@@ -24,7 +24,7 @@ public class Piece extends StackPane {
         this._isKing = false;
     }
 
-    public void DrawCircle() {
+    public void CreateCircle() {
 
 
         Position position = Position.getPieceXY(this);
