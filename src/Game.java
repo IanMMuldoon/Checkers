@@ -27,39 +27,6 @@ public class Game
     public int _getWinnerUserID() { return this._winnerUserID; }
     public int _getCurrentPlayerID() { return this._currentPlayerID; }
 
-    private Piece makePiece(){
-        Piece piece = new Piece();
-
-
-        piece.setOnMouseReleased(e->{
-            int newX = toBoard(piece.getLayoutX());
-            int newY = toBoard(piece.getLayoutY());
-
-            int x0 = toBoard(piece.getOldX());
-            int y0 = toBoard(piece.getOldY());
-
-            Position convert = Position.getPieceRP(newX, newY, 0);
-
-            if (!convert._isValid || !_movePiece(piece, convert._row, convert._position)){
-                piece.move(x0, y0);
-            }
-
-            /*if(convert._isValid || ) {
-                _movePiece(piece, convert._row, convert._position);
-            }
-            else{
-                piece.move(x0,y0);
-            }*/
-            //piece.move(newX, newY);
-           /* board[x0][y0].setPiece(null);
-            board[newX][newY].setPiece(piece);*/
-
-            //}
-
-        });
-        return piece;
-    }
-
     public void _reset()
     {
         this._totalMoves = 0;
@@ -76,7 +43,7 @@ public class Game
         for (int i = 1; i <= 12; i++)
         {
 
-            this._pieces[i] = makePiece();
+            this._pieces[i] = new Piece();  //makePiece();
             this._pieces[i].type = PieceType.RED;
             this._pieces[i]._playerID = this._player1UserID;
             //integer division for the row
@@ -88,7 +55,7 @@ public class Game
         //We will define PLAYER 2 start position as the TOP (rows 6-8)
         for (int i = 13; i <= 24; i++)
         {
-            this._pieces[i] = makePiece();
+            this._pieces[i] = new Piece(); //makePiece();
             this._pieces[i].type = PieceType.White;
             this._pieces[i]._playerID = this._player2UserID;
             //integer division for the row
@@ -141,7 +108,7 @@ public class Game
                     can_move = true;
                 }
                 else if (piece._row %2 == 1 //Odd rows move LEFT 1 or RIGHT 0
-                        && (to_position == (piece._position + 1) || to_position == piece._position))
+                        && (to_position == (piece._position - 1) || to_position == piece._position))
                 {
                     can_move = true;
                 }
@@ -205,6 +172,7 @@ public class Game
     public boolean _movePiece(Piece piece, int to_row, int to_position)
     {
         boolean moved = false;
+        this._mustJumpAgain = false;
 
         if (this._canMovePiece(piece, to_row, to_position))
         {
