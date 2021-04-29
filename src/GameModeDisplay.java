@@ -51,7 +51,10 @@ public class GameModeDisplay extends Application {
 
         //Next screen
         Button nextBtn = new Button("Next");
-        //nextBtn.setOnAction(e-> ...);//move to desingated screen
+        nextBtn.setOnAction(e-> {
+
+
+        }); //move to desingated screen
         HBox layout_next = new HBox(10);
         layout_next.setAlignment(Pos.BOTTOM_RIGHT);
         layout_next.getChildren().add(nextBtn);
