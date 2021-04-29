@@ -5,7 +5,7 @@ import javafx.scene.shape.Rectangle;
 
 public class Tile extends Rectangle{
 
-    private Piece piece;
+    public Piece piece;
 
     public Tile(boolean light, int x, int y){ // light is used for the 2 types of tiles(light and dark). x and y refer to tile coordinates, not pixels
         setWidth(Main.TILE_SIZE);
