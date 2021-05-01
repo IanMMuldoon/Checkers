@@ -8,7 +8,10 @@ import javafx.scene.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
 
 public class Main extends Application {
     public static final int TILE_SIZE = 100;
@@ -20,10 +23,12 @@ public class Main extends Application {
     private Group tileGroup = new Group(); //separate Group for tiles and pieces so pieces are on top of tiles
     private Group pieceGroup = new Group();
 
-    private Parent createContent() {
+
+    private Parent createContent() throws Exception{
         Pane root = new Pane();
         root.setPrefSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
         root.getChildren().addAll(tileGroup, pieceGroup);
+
 
         DrawTiles();
         DrawPieces();
@@ -46,6 +51,7 @@ public class Main extends Application {
     }
     public void DrawPieces()
     {
+
         for (int i = 0; i < game._pieces.length; i++)
         {
             if (game._pieces[i] != null) {
@@ -89,6 +95,11 @@ public class Main extends Application {
                     {
                         this._removeMissingPieces();
                     }
+                    game._kingPiece(piece);
+                    if(piece._isKing){
+                        piece.CreateCircle();
+                    }
+
                 });
 
                 pieceGroup.getChildren().add(game._pieces[i]);
