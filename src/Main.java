@@ -15,7 +15,7 @@ public class Main extends Application {
     public static final int WIDTH = 8;
     public static final int HEIGHT = 8;
 
-    private Game game = new Game(1,2);
+    private Game game = new Game(1, 2);
 
     private Group tileGroup = new Group(); //separate Group for tiles and pieces so pieces are on top of tiles
     private Group pieceGroup = new Group();
@@ -30,7 +30,8 @@ public class Main extends Application {
 
         return root;
     }
-    public void DrawTiles(){
+
+    public void DrawTiles() {
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
                 Tile tile = new Tile((x + y) % 2 == 0, x, y); //If the sum or the coordinates is even then the tile is light
@@ -44,10 +45,9 @@ public class Main extends Application {
             }
         }
     }
-    public void DrawPieces()
-    {
-        for (int i = 0; i < game._pieces.length; i++)
-        {
+
+    public void DrawPieces() {
+        for (int i = 0; i < game._pieces.length; i++) {
             if (game._pieces[i] != null) {
                 game._pieces[i].CreateCircle();
 
@@ -57,21 +57,20 @@ public class Main extends Application {
                 game._pieces[i].setOnMousePressed(e ->
                 {
                     piece._isDragging = (piece._playerID == game._getCurrentPlayerID());
-                    if (piece._isDragging)
-                    {
+                    if (piece._isDragging) {
 
                         piece.mouseX = e.getSceneX();
                         piece.mouseY = e.getSceneY();
                     }
                 });
 
-                game._pieces[i].setOnMouseDragged(e->
+                game._pieces[i].setOnMouseDragged(e ->
                 {
                     if (piece._isDragging)
                         piece.relocate(e.getSceneX() - piece.mouseX + piece.oldX, e.getSceneY() - piece.mouseY + piece.oldY);
                 });
 
-                piece.setOnMouseReleased(e->
+                piece.setOnMouseReleased(e ->
                 {
                     int newX = toBoard(piece.getLayoutX());
                     int newY = toBoard(piece.getLayoutY());
@@ -81,20 +80,47 @@ public class Main extends Application {
 
                     Position convert = Position.getPieceRP(newX, newY, 0);
 
-                    if (!convert._isValid || ! game._movePiece(piece, convert._row, convert._position))
-                    {
+                    if (!convert._isValid || !game._movePiece(piece, convert._row, convert._position)) {
                         piece.move(x0, y0);
-                    }
-                    else
-                    {
+                    } else {
                         this._removeMissingPieces();
                     }
+                    if (isGameOver()) {
+                        System.out.println("The Game Is Now Over!");
+                        game._reset();
+                        DrawPieces();
+                    }
+
                 });
 
                 pieceGroup.getChildren().add(game._pieces[i]);
+
+
             }
         }
     }
+
+    private boolean isGameOver() {
+        boolean result = false;
+        int count = 0;
+        int count1 = 0;
+        try {
+            for (int j = 1; j <= 24; j++) {
+                if (game._pieces[j] != null && game._pieces[j].type == PieceType.RED) {
+                    count = count + 1;
+                }
+                if (game._pieces[j] != null && game._pieces[j].type == PieceType.White) {
+                    count1 = count1 + 1;
+                }
+            }
+        }catch(ArrayIndexOutOfBoundsException e){}
+        if (count == 0 || count1 == 0)
+            result = true;
+        return result;
+    }
+
+
+
 
     private void _removeMissingPieces()
     {

@@ -19,7 +19,7 @@ public class Game
 
         HistoryFile.SaveName("james");
         HistoryRecord[] records = HistoryFile.GetRecords();
-        HistoryFile.RecordWin(records[2].ID);
+       // HistoryFile.RecordWin(records[2].ID);
         HistoryFile.RecordLoss(records[0].ID);
         this._reset();
     }
