@@ -85,6 +85,10 @@ public class Main extends Application {
                     } else {
                         this._removeMissingPieces();
                     }
+                    game._kingPiece(piece);
+                    if(piece._isKing){
+                        piece.CreateCircle();
+                    }
                     if (isGameOver()) {
                         System.out.println("The Game Is Now Over!");
                         game._reset();
