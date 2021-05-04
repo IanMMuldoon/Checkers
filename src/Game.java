@@ -11,6 +11,10 @@ public class Game
     private int _totalMoves;
     private int _winnerUserID;
     private int _currentPlayerID;
+    private int _player1ActivePieces = 12;
+    private int _player2ActivePieces = 12;
+    public static int _quit = 0; //if quit = 1, stop running
+    
 
     public Game(int player1userid, int player2userid)
     {
@@ -230,6 +234,10 @@ public class Game
             //Check if a piece was captured
             if (this._pieceToCapture != null) {
                 //Remove the captured piece
+                if(this._currentPlayerID == this._player1UserID)
+                    this._player2ActivePieces--;
+                else
+                    this._player1ActivePieces--;
                 Piece[] newlist = new Piece[this._pieces.length - 1];
                 int i = 0;
                 for (Piece piecetocopy : this._pieces) {
@@ -268,6 +276,10 @@ public class Game
             this._currentPlayerID = this._player2UserID;
         else
             this._currentPlayerID = this._player1UserID;
+        if(this._player1ActivePieces == 0)
+            this._callFinish(this._player2UserID);
+        if(this._player2ActivePieces == 0)
+            this._callFinish(this._player1UserID);
     }
 
     public void _kingPiece(Piece piece)
@@ -293,5 +305,26 @@ public class Game
     }
     private int toBoard(double pixel){
         return (int)(pixel + TILE_SIZE / 2) / TILE_SIZE;
+    }
+    private void _terminateGame(){
+        MatchHistory.writeMH(this._gameID, this._player1UserID, this._player2UserID, this._winnerUserID);
+        this._quit = 1;
+    }
+    public static void _callForfeit(){
+        if(this._currentPlayerID == this._player1UserID)
+            this._winnerUserID = this._player2UserID;
+        else
+            this._winnerUserID = this._player1UserID;
+
+        this._terminateGame();
+    }
+    public static void _callDraw(){
+        this._winnerUserID = 0; 
+        this._terminateGame();
+    }
+    private void _callFinish(int winnerID){
+        //if _player1ActivePieces or _player2ActivePieces = 0
+        this._winnerUserID = winnerID;
+        this._terminateGame();
     }
 }
