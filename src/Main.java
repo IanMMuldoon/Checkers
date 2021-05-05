@@ -11,7 +11,10 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
+import javafx.scene.control.Button;
+import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
 
 public class Main extends Application {
     public static final int TILE_SIZE = 100;
@@ -29,7 +32,48 @@ public class Main extends Application {
         root.setPrefSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
         root.getChildren().addAll(tileGroup, pieceGroup);
 
+        Button ProposeTakeback = new Button("Propose \nTakeback");
+        ProposeTakeback.setLayoutX(830);
+        ProposeTakeback.setLayoutY(200);
+        ProposeTakeback.setMinWidth(150);
+        ProposeTakeback.setMinHeight(100);
+        ProposeTakeback.setStyle("-fx-font-size:20");
+        ProposeTakeback.setOnAction(e -> {
+            game._proposedTakeback();
+            Piece piece = game.takeBack;
+            /*
 
+                The logic is done. Still have to move pieces.
+             */
+        });
+
+        Button Forfeit = new Button("Forfeit");
+        Forfeit.setLayoutX(830);
+        Forfeit.setLayoutY(500);
+        Forfeit.setMinWidth(150);
+        Forfeit.setMinHeight(100);
+        Forfeit.setStyle("-fx-font-size:20");
+        Forfeit.setOnAction(e ->{
+            game._callForfeit();
+            /*
+            * The logic is done. Just have to close window and update Match History or Player stats.
+            * */
+        });
+
+        Button Draw = new Button("Draw");
+        Draw.setLayoutX(830);
+        Draw.setLayoutY(350);
+        Draw.setMinWidth(150);
+        Draw.setMinHeight(100);
+        Draw.setStyle("-fx-font-size:20");
+        Draw.setOnAction( e-> {
+            game._callDraw();
+            /*
+            * Logic is done. Just have to close window and update data
+            * */
+        });
+
+        root.getChildren(). addAll(ProposeTakeback, Forfeit, Draw);
         DrawTiles();
         DrawPieces();
 
