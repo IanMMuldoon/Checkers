@@ -14,8 +14,10 @@ public class MainMenuTest extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("MainMenu.fxml"));
+        //FXMLLoader loader = new FXMLLoader(Main.class.getResource("MainMenu.fxml"));
+        //Parent root =  loader.load();
         primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        primaryStage.setScene(new Scene(root, 600, 400));
         primaryStage.show();
     }
 
