@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
-
 public class Game
 {
     public static final int TILE_SIZE = 100;
@@ -15,20 +12,17 @@ public class Game
     private int _winnerUserID;
     private int _currentPlayerID;
 
-    private List<Integer> _moveHistoryP1 = new ArrayList<Integer>();
-    private  List<Integer> _moveHistoryP2 = new ArrayList<Integer>();
-
-    public Piece takeBack; //after proposed takeback is called, this is updated
-
-    private int _player1ActivePieces = 12; //if either equals 0, we have winner
-    private int _player2ActivePieces = 12;
-    public int _quit = 0; // if it equals 1, quit the game
-
     public Game(int player1userid, int player2userid)
     {
         this._player1UserID = player1userid;
         this._player2UserID = player2userid;
 
+        HistoryFile.SaveName("james");
+        HistoryFile.SaveName("Ian");
+        HistoryRecord[] records = HistoryFile.GetRecords();
+
+        HistoryFile.RecordWin(records[0].ID);
+        HistoryFile.RecordLoss(records[0].ID);
         this._reset();
     }
 
@@ -101,17 +95,17 @@ public class Game
         {
             if ((to_row == (piece._row + 1)) || (to_row == (piece._row - 1))){
                 //Moving
-            if (piece._row %2 == 0 //Even rows move LEFT 0 or RIGHT 1
-                    && (to_position == piece._position || to_position == (piece._position + 1 )))
-            {
-                can_move = true;
+                if (piece._row %2 == 0 //Even rows move LEFT 0 or RIGHT 1
+                        && (to_position == piece._position || to_position == (piece._position + 1 )))
+                {
+                    can_move = true;
+                }
+                else if (piece._row %2 == 1 //Odd rows move LEFT 1 or RIGHT 0
+                        && (to_position == (piece._position - 1) || to_position == piece._position))
+                {
+                    can_move = true;
+                }
             }
-            else if (piece._row %2 == 1 //Odd rows move LEFT 1 or RIGHT 0
-                    && (to_position == (piece._position - 1) || to_position == piece._position))
-            {
-                can_move = true;
-            }
-        }
             else if ((to_row == (piece._row + 2)) || (to_row == (piece._row - 2)) )
             {
                 //Jumping
@@ -145,7 +139,6 @@ public class Game
                 }
             }
         }
-
         else
         {
             //regular pieces
@@ -233,10 +226,8 @@ public class Game
 
         if (this._canMovePiece(piece, to_row, to_position))
         {
-            this._updateMovesList(piece, to_row, to_position);
             piece._row = to_row;
             piece._position = to_position;
-            this._totalMoves++;
 
             Position convert = Position.getPieceXY(piece);
             piece.move(convert._x, convert._y);
@@ -244,10 +235,6 @@ public class Game
             //Check if a piece was captured
             if (this._pieceToCapture != null) {
                 //Remove the captured piece
-                 if(this._currentPlayerID == this._player1UserID)
-                    this._player2ActivePieces--;
-                else
-                    this._player1ActivePieces--;
                 Piece[] newlist = new Piece[this._pieces.length - 1];
                 int i = 0;
                 for (Piece piecetocopy : this._pieces) {
@@ -286,11 +273,6 @@ public class Game
             this._currentPlayerID = this._player2UserID;
         else
             this._currentPlayerID = this._player1UserID;
-
-         if(this._player1ActivePieces == 0)
-            this._callFinish(this._player2UserID); // we have winner
-        if(this._player2ActivePieces==0)
-            this._callFinish(this._player1UserID);
     }
 
     public void _kingPiece(Piece piece)
@@ -298,14 +280,11 @@ public class Game
         if (piece._isKing)
             return;
 
-        //Determine if this piece is actually in appropriate row
-        /*if ((this._pieceIsPlayer1(piece) && piece._row == 8)
-                || (piece._row == 1))
-            piece._isKing = true;*/
         if((piece.type == PieceType.RED && piece._row == 8) || (piece.type == PieceType.White && piece._row == 1)){
             piece._isKing = true;
         }
     }
+
 
     private boolean _pieceIsPlayer1(Piece piece)
     {
@@ -317,87 +296,4 @@ public class Game
     private int toBoard(double pixel){
         return (int)(pixel + TILE_SIZE / 2) / TILE_SIZE;
     }
-     private int _convertPosition(int row, int position){
-        int i = 1;
-        int temp = position;
-        while(i<row){
-            temp += 4;
-            i++;
-        }
-        return temp;
-    }
-    private void _updateMovesList(Piece piece, int to_row, int to_position){
-        if(this._pieceIsPlayer1(piece)){
-            this._moveHistoryP1.add(_convertPosition(piece._row, piece._position));
-            this._moveHistoryP1.add(_convertPosition(to_row, to_position));
-        }
-        else{
-            this._moveHistoryP2.add(_convertPosition(piece._row, piece._position));
-            this._moveHistoryP2.add(_convertPosition(to_row, to_position));
-        }
-    }
-
-    public void _proposedTakeback(){
-        int to_row=1;
-        int from_row =1;
-        int to_position, from_position;
-        Piece undoPiece;
-
-        if(this._currentPlayerID == this._player2UserID ){
-            to_position = this._moveHistoryP1.get(this._moveHistoryP1.size()-2);
-            from_position = this._moveHistoryP1.get(this._moveHistoryP1.size()-1);
-        }
-        else{
-            to_position = this._moveHistoryP2.get(this._moveHistoryP2.size()-2);
-            from_position = this._moveHistoryP2.get(this._moveHistoryP2.size()-1);
-        }
-
-        while(to_position != 1 && to_position != 2 && to_position != 3 && to_position != 4){
-            to_position -= 4;
-            to_row++;
-        }
-        while(from_position != 1 && from_position != 2 && from_position !=3 && from_position != 4){
-            from_position -=4;
-            from_row++;
-        }
-
-        undoPiece = this._getSquarePiece(from_row, from_position);
-        undoPiece._row = to_row;
-        undoPiece._position = to_position;
-
-        this._totalMoves--;
-
-        if(undoPiece._playerID == this._player1UserID){
-            this._moveHistoryP1.remove(this._moveHistoryP1.size()-1);
-            this._moveHistoryP1.remove(this._moveHistoryP1.size()-2);
-        }
-        else{
-            this._moveHistoryP2.remove(this._moveHistoryP2.size()-1);
-            this._moveHistoryP2.remove(this._moveHistoryP2.size()-2);
-        }
-        this.takeBack = undoPiece;
-        this._toggleCurrentPlayer();
-    }
-    private void _terminateGame(){
-        //write winner in file
-        //MatchHistory.writeMH(this._gameID, this._player1UserID, this._player2UserID, this._winnerUserID);
-        this._quit =1;
-    }
-    public void _callForfeit(){
-        if(this._currentPlayerID == this._player1UserID)
-            this._winnerUserID = this._player2UserID;
-        else
-            this._winnerUserID = this._player1UserID;
-
-        this._terminateGame();
-    }
-    public void _callDraw(){
-        this._winnerUserID = 0;
-        this._terminateGame();
-    }
-    private void _callFinish(int winnerID){
-        this._winnerUserID = winnerID;
-        this._terminateGame();
-    }
-
 }

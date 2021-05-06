@@ -1,23 +1,9 @@
-
-
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.*;
 import javafx.scene.shape.Ellipse;
 
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import javax.imageio.ImageIO;
-import java.io.IOException;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-
-import javafx.scene.*;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.layout.*;
-import javafx.stage.Stage;
 
 
 public class Piece extends StackPane {

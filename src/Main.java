@@ -8,78 +8,33 @@ import javafx.scene.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.scene.control.Button;
-import javafx.event.EventHandler;
-import javafx.event.ActionEvent;
-import javafx.geometry.Insets;
 
 public class Main extends Application {
     public static final int TILE_SIZE = 100;
     public static final int WIDTH = 8;
     public static final int HEIGHT = 8;
+    public static boolean isRedWinner = false;
 
-    private Game game = new Game(1,2);
+    private Game game = new Game(1, 2);
 
     private Group tileGroup = new Group(); //separate Group for tiles and pieces so pieces are on top of tiles
     private Group pieceGroup = new Group();
 
 
-    private Parent createContent() throws Exception{
+
+    private Parent createContent() {
         Pane root = new Pane();
         root.setPrefSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
         root.getChildren().addAll(tileGroup, pieceGroup);
 
-        Button ProposeTakeback = new Button("Propose \nTakeback");
-        ProposeTakeback.setLayoutX(830);
-        ProposeTakeback.setLayoutY(200);
-        ProposeTakeback.setMinWidth(150);
-        ProposeTakeback.setMinHeight(100);
-        ProposeTakeback.setStyle("-fx-font-size:20");
-        ProposeTakeback.setOnAction(e -> {
-            game._proposedTakeback();
-            Piece piece = game.takeBack;
-            /*
-
-                The logic is done. Still have to move pieces.
-             */
-        });
-
-        Button Forfeit = new Button("Forfeit");
-        Forfeit.setLayoutX(830);
-        Forfeit.setLayoutY(500);
-        Forfeit.setMinWidth(150);
-        Forfeit.setMinHeight(100);
-        Forfeit.setStyle("-fx-font-size:20");
-        Forfeit.setOnAction(e ->{
-            game._callForfeit();
-            /*
-            * The logic is done. Just have to close window and update Match History or Player stats.
-            * */
-        });
-
-        Button Draw = new Button("Draw");
-        Draw.setLayoutX(830);
-        Draw.setLayoutY(350);
-        Draw.setMinWidth(150);
-        Draw.setMinHeight(100);
-        Draw.setStyle("-fx-font-size:20");
-        Draw.setOnAction( e-> {
-            game._callDraw();
-            /*
-            * Logic is done. Just have to close window and update data
-            * */
-        });
-
-        root.getChildren(). addAll(ProposeTakeback, Forfeit, Draw);
         DrawTiles();
         DrawPieces();
 
         return root;
     }
-    public void DrawTiles(){
+
+    public void DrawTiles() {
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
                 Tile tile = new Tile((x + y) % 2 == 0, x, y); //If the sum or the coordinates is even then the tile is light
@@ -93,11 +48,9 @@ public class Main extends Application {
             }
         }
     }
-    public void DrawPieces()
-    {
 
-        for (int i = 0; i < game._pieces.length; i++)
-        {
+    public void DrawPieces() {
+        for (int i = 0; i < game._pieces.length; i++) {
             if (game._pieces[i] != null) {
                 game._pieces[i].CreateCircle();
 
@@ -107,21 +60,20 @@ public class Main extends Application {
                 game._pieces[i].setOnMousePressed(e ->
                 {
                     piece._isDragging = (piece._playerID == game._getCurrentPlayerID());
-                    if (piece._isDragging)
-                    {
+                    if (piece._isDragging) {
 
                         piece.mouseX = e.getSceneX();
                         piece.mouseY = e.getSceneY();
                     }
                 });
 
-                game._pieces[i].setOnMouseDragged(e->
+                game._pieces[i].setOnMouseDragged(e ->
                 {
                     if (piece._isDragging)
                         piece.relocate(e.getSceneX() - piece.mouseX + piece.oldX, e.getSceneY() - piece.mouseY + piece.oldY);
                 });
 
-                piece.setOnMouseReleased(e->
+                piece.setOnMouseReleased(e ->
                 {
                     int newX = toBoard(piece.getLayoutX());
                     int newY = toBoard(piece.getLayoutY());
@@ -131,25 +83,57 @@ public class Main extends Application {
 
                     Position convert = Position.getPieceRP(newX, newY, 0);
 
-                    if (!convert._isValid || ! game._movePiece(piece, convert._row, convert._position))
-                    {
+                    if (!convert._isValid || !game._movePiece(piece, convert._row, convert._position)) {
                         piece.move(x0, y0);
-                    }
-                    else
-                    {
+                    } else {
                         this._removeMissingPieces();
                     }
                     game._kingPiece(piece);
                     if(piece._isKing){
                         piece.CreateCircle();
                     }
+                    if (isGameOver()) {
+                        System.out.println("Game Over!");
+                        game._reset();
+                        DrawPieces();
+                        HistoryRecord[] records = HistoryFile.GetRecords();
+                        if(isRedWinner){
+
+                        }
+                    }
 
                 });
 
                 pieceGroup.getChildren().add(game._pieces[i]);
+
+
             }
         }
     }
+
+    private boolean isGameOver() {
+        boolean result = false;
+        int count = 0;
+        int count1 = 0;
+        try {
+            for (int j = 1; j <= 24; j++) {
+                if (game._pieces[j] != null && game._pieces[j].type == PieceType.RED) {
+                    count = count + 1;
+                }
+                if (game._pieces[j] != null && game._pieces[j].type == PieceType.White) {
+                    count1 = count1 + 1;
+                }
+            }
+        }catch(ArrayIndexOutOfBoundsException e){}
+        if(count == 0)
+            isRedWinner = true;
+        if (count == 0 || count1 == 0)
+            result = true;
+        return result;
+    }
+
+
+
 
     private void _removeMissingPieces()
     {
