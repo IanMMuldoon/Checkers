@@ -14,7 +14,6 @@ public class GameScreen extends Application {
     public static final int TILE_SIZE = 100;
     public static final int WIDTH = 8;
     public static final int HEIGHT = 8;
-    public static boolean isRedWinner = false;
 
     private Game game = new Game(1, 2);
 
@@ -23,13 +22,14 @@ public class GameScreen extends Application {
 
 
 
-    private Parent createContent() {
+    private Parent createContent()
+    {
         Pane root = new Pane();
         root.setPrefSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
         root.getChildren().addAll(tileGroup, pieceGroup);
 
-        DrawTiles();
-        DrawPieces();
+        this.DrawTiles();
+        this.DrawPieces();
 
         return root;
     }
@@ -85,55 +85,55 @@ public class GameScreen extends Application {
 
                     if (!convert._isValid || !game._movePiece(piece, convert._row, convert._position)) {
                         piece.move(x0, y0);
-                    } else {
+                    }
+                    else
+                    {
                         this._removeMissingPieces();
                     }
                     game._kingPiece(piece);
                     if(piece._isKing){
                         piece.CreateCircle();
                     }
-                    if (isGameOver()) {
-                        System.out.println("Game Over!");
-                        game._reset();
-                        DrawPieces();
-                        HistoryRecord[] records = HistoryFile.GetRecords();
-                        if(isRedWinner){
 
+                    if (game.isGameOver())
+                    {
+                        System.out.println("Game Over!");
+
+                        this._clearPieces();
+
+                        game._reset();
+
+                        this.DrawPieces();
+
+                        HistoryRecord[] records = HistoryFile.GetRecords();
+
+                        if(game._getWinnerUserID() == game._getPlayer1UserID())
+                        {
+                            //Player 1 victory
+                        }
+                        else if(game._getWinnerUserID() == game._getPlayer2UserID())
+                        {
+                            //Player 2 victory
+                        }
+                        else
+                        {
+                            //We fucked up
                         }
                     }
 
                 });
 
-                pieceGroup.getChildren().add(game._pieces[i]);
+                try
+                {
+                    pieceGroup.getChildren().add(game._pieces[i]);
+                }
+                catch (Exception ex)
+                {
 
-
+                }
             }
         }
     }
-
-    private boolean isGameOver() {
-        boolean result = false;
-        int count = 0;
-        int count1 = 0;
-        try {
-            for (int j = 1; j <= 24; j++) {
-                if (game._pieces[j] != null && game._pieces[j].type == PieceType.RED) {
-                    count = count + 1;
-                }
-                if (game._pieces[j] != null && game._pieces[j].type == PieceType.White) {
-                    count1 = count1 + 1;
-                }
-            }
-        }catch(ArrayIndexOutOfBoundsException e){}
-        if(count == 0)
-            isRedWinner = true;
-        if (count == 0 || count1 == 0)
-            result = true;
-        return result;
-    }
-
-
-
 
     private void _removeMissingPieces()
     {
@@ -156,6 +156,11 @@ public class GameScreen extends Application {
 
             }
         }
+    }
+
+    private void _clearPieces()
+    {
+        this.pieceGroup.getChildren().clear();
     }
 
     @Override
