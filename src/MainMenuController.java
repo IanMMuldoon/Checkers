@@ -6,6 +6,8 @@ import java.util.ResourceBundle;
 
 public class MainMenuController implements Initializable {
     public Button playButton;
+    public Button matchHistoryButton;
+    public Button quitButton;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
