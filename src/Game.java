@@ -1,5 +1,9 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Game
 {
+    private boolean DEBUG = true;
     public static final int TILE_SIZE = 100;
     public static final int WIDTH = 8;
     public static final int HEIGHT = 8;
@@ -39,6 +43,45 @@ public class Game
         this._winnerUserID = 0;
         this._currentPlayerID = this._player1UserID;
 
+        ////////////////////////////////////////////////////////////////////////
+        //DEBUG SETUP
+        if (this.DEBUG)
+        {
+            List<Piece> pieces = new ArrayList<Piece>();
+            Piece piece = new Piece();
+            piece.type = PieceType.White;
+            piece._playerID = this._player2UserID;
+            piece._row = 8;
+            piece._position = 1;
+            pieces.add(piece);
+
+            piece = new Piece();
+            piece.type = PieceType.White;
+            piece._playerID = this._player2UserID;
+            piece._isKing = true;
+            piece._row = 8;
+            piece._position = 2;
+            pieces.add(piece);
+
+            piece = new Piece();
+            piece.type = PieceType.RED;
+            piece._playerID = this._player1UserID;
+            piece._row = 7;
+            piece._position = 1;
+            pieces.add(piece);
+
+            piece = new Piece();
+            piece.type = PieceType.RED;
+            piece._playerID = this._player1UserID;
+            piece._row = 6;
+            piece._position = 2;
+            pieces.add(piece);
+
+            this._pieces = pieces.toArray(new Piece[pieces.size()]);
+
+            return;
+        }
+
         //Set up the pieces (maybe this can be two arrays? player 1 pieces/player 2 pieces?
         this._pieces = new Piece[25];
 
@@ -54,8 +97,7 @@ public class Game
             this._pieces[i]._playerID = this._player1UserID;
             //integer division for the row
             this._pieces[i]._row = (i + 3) / 4;
-            this._pieces[i]._position = (i - (this._pieces[i]._row-1)*4);
-
+            this._pieces[i]._position = (i - (this._pieces[i]._row - 1) * 4);
         }
 
         //We will define PLAYER 2 start position as the TOP (rows 6-8)
@@ -66,8 +108,8 @@ public class Game
             this._pieces[i]._playerID = this._player2UserID;
             //integer division for the row
             this._pieces[i]._row = ((i + 3) / 4) + 2; //skipping two rows
-            this._pieces[i]._position = (i-12) - (this._pieces[i]._row-6)*4;
-
+            this._pieces[i]._position = (i - 12) - (this._pieces[i]._row - 6) * 4;
+        }
 
 //How the position formula works
 //            @i = 1: 1 - (1-1)*4 = 1
@@ -76,7 +118,6 @@ public class Game
 //            @i = 20: (20-12) - (((20 + 3) / 4) + 2 -6)*4 -> 8 - (5+2-6)*4 -> 8 - 4 = 4
 //            @i = 17: (17-12) - (((17 + 3) / 4) + 2 -6)*4 -> 5 - (5+2-6)*4 -> 5 - 4 = 1
 //            @i = 23: (23-12) - (((23 + 3) / 4) + 2 -6)*4 -> 11 - (6+2-6)*4 -> 11 - 8 = 3
-        }
     }
 
     private Piece _pieceToCapture = null;
@@ -199,24 +240,27 @@ public class Game
         //Check for player elimination
         try
         {
-            for (int i = 1; i <= 24; i++)
+            for (Piece piece : this._pieces)
             {
-                if (!player1inplay && this._pieces[i] != null && this._pieces[i]._playerID == this._player1UserID)
+                if (piece != null)
                 {
-                    player1inplay = true;
-                }
+                    if (!player1inplay && piece != null && piece._playerID == this._player1UserID) {
+                        player1inplay = true;
+                    }
 
-                if (!player2inplay && this._pieces[i] != null && this._pieces[i]._playerID == this._player2UserID)
-                {
-                    player2inplay = true;
+                    if (!player2inplay && piece != null && piece._playerID == this._player2UserID) {
+                        player2inplay = true;
+                    }
                 }
-
                 //We can stop once we found pieces for both
                 if (player1inplay && player2inplay)
                     break;
             }
         }
-        catch(Exception e) {}
+        catch(Exception e)
+        {
+            int x = 4;
+        }
 
         this._winnerUserID = 0;
 
@@ -229,32 +273,35 @@ public class Game
 
         if (!gameover)
         {
-            //check for no more moves
+            //check if there are no more moves FOR THE CURRENT PLAYER
             try
             {
                 this._testPossibleJumps =  false;
                 boolean possiblemoveexists = false;
 
-                for (int i = 1; i <= 24; i++)
+                for (Piece piece : this._pieces)
                 {
-                    if (this._canMovePiece(this._pieces[i], this._pieces[i]._row + 1, this._pieces[i]._position -1)
-                    || this._canMovePiece(this._pieces[i], this._pieces[i]._row + 1, this._pieces[i]._position)
-                    || this._canMovePiece(this._pieces[i], this._pieces[i]._row + 1, this._pieces[i]._position + 1)
-
-                    || this._canMovePiece(this._pieces[i], this._pieces[i]._row - 1, this._pieces[i]._position -1)
-                    || this._canMovePiece(this._pieces[i], this._pieces[i]._row - 1, this._pieces[i]._position)
-                    || this._canMovePiece(this._pieces[i], this._pieces[i]._row - 1, this._pieces[i]._position +1)
-
-                    || this._canMovePiece(this._pieces[i], this._pieces[i]._row + 2, this._pieces[i]._position -1)
-                    || this._canMovePiece(this._pieces[i], this._pieces[i]._row + 2, this._pieces[i]._position)
-                    || this._canMovePiece(this._pieces[i], this._pieces[i]._row + 2, this._pieces[i]._position + 1)
-
-                    || this._canMovePiece(this._pieces[i], this._pieces[i]._row - 2, this._pieces[i]._position -1)
-                    || this._canMovePiece(this._pieces[i], this._pieces[i]._row - 2, this._pieces[i]._position)
-                    || this._canMovePiece(this._pieces[i], this._pieces[i]._row - 2, this._pieces[i]._position +1))
+                    if (piece != null && piece._playerID == this._currentPlayerID)
                     {
-                        possiblemoveexists = true;
-                        break;
+                        if (this._canMovePiece(piece, piece._row + 1, piece._position - 1)
+                        || this._canMovePiece(piece, piece._row + 1, piece._position)
+                        || this._canMovePiece(piece, piece._row + 1, piece._position + 1)
+
+                        || this._canMovePiece(piece, piece._row - 1, piece._position - 1)
+                        || this._canMovePiece(piece, piece._row - 1, piece._position)
+                        || this._canMovePiece(piece, piece._row - 1, piece._position + 1)
+
+                        || this._canMovePiece(piece, piece._row + 2, piece._position - 1)
+                        || this._canMovePiece(piece, piece._row + 2, piece._position)
+                        || this._canMovePiece(piece, piece._row + 2, piece._position + 1)
+
+                        || this._canMovePiece(piece, piece._row - 2, piece._position - 1)
+                        || this._canMovePiece(piece, piece._row - 2, piece._position)
+                        || this._canMovePiece(piece, piece._row - 2, piece._position + 1))
+                        {
+                            possiblemoveexists = true;
+                            break;
+                        }
                     }
                 }
 
@@ -313,18 +360,10 @@ public class Game
             piece.move(convert._x, convert._y);
 
             //Check if a piece was captured
-            if (this._pieceToCapture != null) {
+            if (this._pieceToCapture != null)
+            {
                 //Remove the captured piece
-                Piece[] newlist = new Piece[this._pieces.length - 1];
-                int i = 0;
-                for (Piece piecetocopy : this._pieces) {
-                    if (piecetocopy != this._pieceToCapture)
-                        newlist[i++] = piecetocopy;
-                    else
-                        piecetocopy = null;
-                }
-
-                this._pieces = newlist;
+                this._removePiece(this._pieceToCapture);
                 this._pieceToCapture = null;
 
                 //player 1 regular pieces move UP = 1, Player 2 regular pieces move DOWN = -1
@@ -347,6 +386,21 @@ public class Game
         return moved;
     }
 
+    private void _removePiece(Piece piecetoremove)
+    {
+        Piece[] newlist = new Piece[this._pieces.length - 1];
+        int i = 0;
+        for (Piece piecetocopy : this._pieces)
+        {
+            if (piecetocopy != piecetoremove)
+                newlist[i++] = piecetocopy;
+            else
+                piecetocopy = null;
+        }
+
+        this._pieces = newlist;
+    }
+
     private void _toggleCurrentPlayer()
     {
         if (this._currentPlayerID == this._player1UserID)
@@ -364,7 +418,6 @@ public class Game
             piece._isKing = true;
         }
     }
-
 
     private boolean _pieceIsPlayer1(Piece piece)
     {
