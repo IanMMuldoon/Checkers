@@ -97,7 +97,6 @@ public class GameScreen extends Application {
 
                     if (game.isGameOver())
                     {
-                        System.out.println("Game Over!");
 
                         this._clearPieces();
 
@@ -110,14 +109,17 @@ public class GameScreen extends Application {
                         if(game._getWinnerUserID() == game._getPlayer1UserID())
                         {
                             //Player 1 victory
+                            HistoryFile.RecordWin(game._getPlayer1UserID());
+                            HistoryFile.RecordLoss(game._getPlayer1UserID());
                         }
                         else if(game._getWinnerUserID() == game._getPlayer2UserID())
                         {
                             //Player 2 victory
-                        }
-                        else
+                            HistoryFile.RecordWin(game._getPlayer2UserID());
+                            HistoryFile.RecordLoss(game._getPlayer1UserID());
+                        }else
                         {
-                            //We fucked up
+                            System.out.println("Nobody Won?");
                         }
                     }
 
@@ -158,7 +160,7 @@ public class GameScreen extends Application {
         }
     }
 
-    private void _clearPieces()
+    public void _clearPieces()
     {
         this.pieceGroup.getChildren().clear();
     }

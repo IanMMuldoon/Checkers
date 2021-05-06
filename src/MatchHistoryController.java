@@ -19,11 +19,10 @@ public class MatchHistoryController implements Initializable {
     }
     private void loadData(){
         list.removeAll(list);
-        String a = "User1 goes here";
-        String b = "User2 goes here";
-        String c = "User3 goes here";
-        String d = "User4 goes here";
-        list.addAll(a,b,c,d);
+        HistoryRecord[] records = HistoryFile.GetRecords();
+        for(int i = 0; i < records.length; i++){
+            list.add(records[i].toString());
+        }
         historyList.getItems().addAll(list);
     }
 
