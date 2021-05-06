@@ -22,13 +22,14 @@ public class Main extends Application {
 
 
 
-    private Parent createContent() {
+    private Parent createContent()
+    {
         Pane root = new Pane();
         root.setPrefSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
         root.getChildren().addAll(tileGroup, pieceGroup);
 
-        DrawTiles();
-        DrawPieces();
+        this.DrawTiles();
+        this.DrawPieces();
 
         return root;
     }
@@ -84,7 +85,9 @@ public class Main extends Application {
 
                     if (!convert._isValid || !game._movePiece(piece, convert._row, convert._position)) {
                         piece.move(x0, y0);
-                    } else {
+                    }
+                    else
+                    {
                         this._removeMissingPieces();
                     }
                     game._kingPiece(piece);
@@ -95,8 +98,13 @@ public class Main extends Application {
                     if (game.isGameOver())
                     {
                         System.out.println("Game Over!");
+
+                        this._clearPieces();
+
                         game._reset();
-                        DrawPieces();
+
+                        this.DrawPieces();
+
                         HistoryRecord[] records = HistoryFile.GetRecords();
 
                         if(game._getWinnerUserID() == game._getPlayer1UserID())
@@ -115,9 +123,14 @@ public class Main extends Application {
 
                 });
 
-                pieceGroup.getChildren().add(game._pieces[i]);
+                try
+                {
+                    pieceGroup.getChildren().add(game._pieces[i]);
+                }
+                catch (Exception ex)
+                {
 
-
+                }
             }
         }
     }
@@ -143,6 +156,11 @@ public class Main extends Application {
 
             }
         }
+    }
+
+    private void _clearPieces()
+    {
+        this.pieceGroup.getChildren().clear();
     }
 
     @Override
