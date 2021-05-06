@@ -14,11 +14,14 @@ public class Main extends Application {
     public static final int TILE_SIZE = 100;
     public static final int WIDTH = 8;
     public static final int HEIGHT = 8;
+    public static boolean isRedWinner = false;
 
     private Game game = new Game(1, 2);
 
     private Group tileGroup = new Group(); //separate Group for tiles and pieces so pieces are on top of tiles
     private Group pieceGroup = new Group();
+
+
 
     private Parent createContent() {
         Pane root = new Pane();
@@ -90,9 +93,13 @@ public class Main extends Application {
                         piece.CreateCircle();
                     }
                     if (isGameOver()) {
-                        System.out.println("The Game Is Now Over!");
+                        System.out.println("Game Over!");
                         game._reset();
                         DrawPieces();
+                        HistoryRecord[] records = HistoryFile.GetRecords();
+                        if(isRedWinner){
+
+                        }
                     }
 
                 });
@@ -118,6 +125,8 @@ public class Main extends Application {
                 }
             }
         }catch(ArrayIndexOutOfBoundsException e){}
+        if(count == 0)
+            isRedWinner = true;
         if (count == 0 || count1 == 0)
             result = true;
         return result;

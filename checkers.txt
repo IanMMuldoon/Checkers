@@ -1,1 +1,2 @@
-1	james	0	16
+1	james	6	7
+2	Ian	0	0

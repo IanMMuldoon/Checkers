@@ -18,8 +18,10 @@ public class Game
         this._player2UserID = player2userid;
 
         HistoryFile.SaveName("james");
+        HistoryFile.SaveName("Ian");
         HistoryRecord[] records = HistoryFile.GetRecords();
-       // HistoryFile.RecordWin(records[2].ID);
+
+        HistoryFile.RecordWin(records[0].ID);
         HistoryFile.RecordLoss(records[0].ID);
         this._reset();
     }

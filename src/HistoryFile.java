@@ -121,6 +121,7 @@ public class HistoryFile
                     if (recordwin)
                     {
                         int wins = Integer.parseInt(values[2]);
+                       // System.out.println(wins);
                         values[2] = String.valueOf(wins + 1);
                     }
                     else
