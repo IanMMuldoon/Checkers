@@ -14,7 +14,6 @@ public class Main extends Application {
     public static final int TILE_SIZE = 100;
     public static final int WIDTH = 8;
     public static final int HEIGHT = 8;
-    public static boolean isRedWinner = false;
 
     private Game game = new Game(1, 2);
 
@@ -92,13 +91,25 @@ public class Main extends Application {
                     if(piece._isKing){
                         piece.CreateCircle();
                     }
-                    if (isGameOver()) {
+
+                    if (game.isGameOver())
+                    {
                         System.out.println("Game Over!");
                         game._reset();
                         DrawPieces();
                         HistoryRecord[] records = HistoryFile.GetRecords();
-                        if(isRedWinner){
 
+                        if(game._getWinnerUserID() == game._getPlayer1UserID())
+                        {
+                            //Player 1 victory
+                        }
+                        else if(game._getWinnerUserID() == game._getPlayer2UserID())
+                        {
+                            //Player 2 victory
+                        }
+                        else
+                        {
+                            //We fucked up
                         }
                     }
 
@@ -110,30 +121,6 @@ public class Main extends Application {
             }
         }
     }
-
-    private boolean isGameOver() {
-        boolean result = false;
-        int count = 0;
-        int count1 = 0;
-        try {
-            for (int j = 1; j <= 24; j++) {
-                if (game._pieces[j] != null && game._pieces[j].type == PieceType.RED) {
-                    count = count + 1;
-                }
-                if (game._pieces[j] != null && game._pieces[j].type == PieceType.White) {
-                    count1 = count1 + 1;
-                }
-            }
-        }catch(ArrayIndexOutOfBoundsException e){}
-        if(count == 0)
-            isRedWinner = true;
-        if (count == 0 || count1 == 0)
-            result = true;
-        return result;
-    }
-
-
-
 
     private void _removeMissingPieces()
     {
