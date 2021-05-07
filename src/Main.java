@@ -1,12 +1,15 @@
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -20,18 +23,34 @@ public class Main extends Application {
     private Group tileGroup = new Group(); //separate Group for tiles and pieces so pieces are on top of tiles
     private Group pieceGroup = new Group();
 
+    private Button takeback;
+    private Button settings;
+    private Button forfeit;
+    private Button retMenu;
 
+    private Parent createContent() throws IOException {
+        BorderPane root = new BorderPane();
+        Pane board = new Pane();
+        Pane sidePane = FXMLLoader.load(getClass().getResource("/SideMenu.fxml"));
+        board.setPrefSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
+        board.getChildren().addAll(tileGroup, pieceGroup);
 
-    private Parent createContent()
-    {
-        Pane root = new Pane();
-        root.setPrefSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
-        root.getChildren().addAll(tileGroup, pieceGroup);
+        this.getButtons(sidePane);
+
+        root.setCenter(board);
+        root.setLeft(sidePane);
 
         this.DrawTiles();
         this.DrawPieces();
 
         return root;
+    }
+
+    private void getButtons (Pane Parent) throws IOException {
+        takeback = (Button) Parent.getChildren().get(0);
+        settings = (Button) Parent.getChildren().get(1);
+        forfeit = (Button) Parent.getChildren().get(2);
+        retMenu = (Button) Parent.getChildren().get(3);
     }
 
     public void DrawTiles() {
@@ -56,6 +75,23 @@ public class Main extends Application {
 
                 //Make copy of iterator to pass to event
                 Piece piece = game._pieces[i];
+
+                takeback.setOnMouseClicked(mouseEvent -> {          //Need to have prompt, then logic for take back
+
+                });
+
+                settings.setOnMouseClicked(mouseEvent -> {          //For this, the only idea was to change colors of board
+
+                });
+
+                forfeit.setOnMouseClicked(mouseEvent -> {           //Need to find which player's turn it is, then end game
+
+                });
+
+                retMenu.setOnMouseClicked(mouseEvent -> {           //End game and return to menu, when menu is made
+
+                });
+
 
                 game._pieces[i].setOnMousePressed(e ->
                 {
