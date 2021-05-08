@@ -24,7 +24,7 @@ public class Main extends Application {
     private Group pieceGroup = new Group();
 
     private Button takeback;
-    private Button settings;
+    private Button changeColors;
     private Button forfeit;
     private Button retMenu;
 
@@ -35,7 +35,7 @@ public class Main extends Application {
         board.setPrefSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
         board.getChildren().addAll(tileGroup, pieceGroup);
 
-        this.getButtons(sidePane);
+        this.setButtons(sidePane);
 
         root.setCenter(board);
         root.setLeft(sidePane);
@@ -46,9 +46,9 @@ public class Main extends Application {
         return root;
     }
 
-    private void getButtons (Pane Parent) throws IOException {
+    private void setButtons (Pane Parent) throws IOException {
         takeback = (Button) Parent.getChildren().get(0);
-        settings = (Button) Parent.getChildren().get(1);
+        changeColors = (Button) Parent.getChildren().get(1);
         forfeit = (Button) Parent.getChildren().get(2);
         retMenu = (Button) Parent.getChildren().get(3);
     }
@@ -80,7 +80,7 @@ public class Main extends Application {
 
                 });
 
-                settings.setOnMouseClicked(mouseEvent -> {          //For this, the only idea was to change colors of board
+                changeColors.setOnMouseClicked(mouseEvent -> {          //For this, the only idea was to change colors of board
 
                 });
 
