@@ -16,7 +16,7 @@ public class MainMenuTest extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("MainMenu.fxml"));
         //FXMLLoader loader = new FXMLLoader(Main.class.getResource("MainMenu.fxml"));
         //Parent root =  loader.load();
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Checkers");
         primaryStage.setScene(new Scene(root, 600, 400));
         primaryStage.show();
     }
