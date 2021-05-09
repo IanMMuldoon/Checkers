@@ -172,6 +172,7 @@ public class GameScreen extends Application {
     public void start (Stage primaryStage) throws Exception {
         gameStage = primaryStage;
         gameStage.initStyle(StageStyle.UNDECORATED);
+        gameStage.setScene(new Scene(createContent(), 600, 400));
         changeScene("MainMenu.fxml");
         gameStage.show();
 
