@@ -36,19 +36,19 @@ public class Piece extends StackPane {
         Position position = Position.getPieceXY(this);
         move(position._x, position._y);
 
-        Ellipse circle = new Ellipse(GameScreen.TILE_SIZE * 0.3125, GameScreen.TILE_SIZE * 0.26);
+        Ellipse circle = new Ellipse(Main.TILE_SIZE * 0.3125, Main.TILE_SIZE * 0.26);
         if (type == PieceType.RED)   //Depending on type, fill circle red or white
             circle.setFill(Color.RED);
         else
             circle.setFill(Color.WHITE);
 
-        circle.setTranslateX((GameScreen.TILE_SIZE - GameScreen.TILE_SIZE * 0.3125 * 2) / 2);
-        circle.setTranslateY((GameScreen.TILE_SIZE - GameScreen.TILE_SIZE * 0.26 * 2) / 2);
+        circle.setTranslateX((Main.TILE_SIZE - Main.TILE_SIZE * 0.3125 * 2) / 2);
+        circle.setTranslateY((Main.TILE_SIZE - Main.TILE_SIZE * 0.26 * 2) / 2);
 
 
         if (_isKing) {
-            t.setTranslateX((GameScreen.TILE_SIZE - GameScreen.TILE_SIZE * 0.3125 * 2) / 2);
-            t.setTranslateY((GameScreen.TILE_SIZE - GameScreen.TILE_SIZE * 0.26 * 2) / 2);
+            t.setTranslateX((Main.TILE_SIZE - Main.TILE_SIZE * 0.3125 * 2) / 2);
+            t.setTranslateY((Main.TILE_SIZE - Main.TILE_SIZE * 0.26 * 2) / 2);
             this.getChildren().addAll(circle, t);
         }else{
 
@@ -57,8 +57,8 @@ public class Piece extends StackPane {
     }
     public void move(int x, int y)
     {
-        oldX = x * GameScreen.TILE_SIZE;
-        oldY = y * GameScreen.TILE_SIZE;
+        oldX = x * Main.TILE_SIZE;
+        oldY = y * Main.TILE_SIZE;
         relocate(oldX, oldY);
     }
     public int getPlayerID()

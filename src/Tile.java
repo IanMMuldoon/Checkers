@@ -8,10 +8,10 @@ public class Tile extends Rectangle{
     public Piece piece;
 
     public Tile(boolean light, int x, int y){ // light is used for the 2 types of tiles(light and dark). x and y refer to tile coordinates, not pixels
-        setWidth(GameScreen.TILE_SIZE);
-        setHeight(GameScreen.TILE_SIZE);
+        setWidth(Main.TILE_SIZE);
+        setHeight(Main.TILE_SIZE);
 
-        relocate(x* GameScreen.TILE_SIZE, y * GameScreen.TILE_SIZE);
+        relocate(x* Main.TILE_SIZE, y * Main.TILE_SIZE);
 
         if(light){
             setFill(Color.valueOf("#feb"));
