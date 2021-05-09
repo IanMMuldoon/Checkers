@@ -1,4 +1,5 @@
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
@@ -10,10 +11,11 @@ import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+public class GameScreen extends Application {
     public static final int TILE_SIZE = 100;
     public static final int WIDTH = 8;
     public static final int HEIGHT = 8;
+    private static Stage gameStage;
 
     private Game game = new Game(1, 2);
 
@@ -22,7 +24,7 @@ public class Main extends Application {
 
 
 
-    private Parent createContent()
+    public Parent createContent()
     {
         Pane root = new Pane();
         root.setPrefSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
@@ -97,7 +99,6 @@ public class Main extends Application {
 
                     if (game.isGameOver())
                     {
-                        System.out.println("Game Over!");
 
                         this._clearPieces();
 
@@ -110,14 +111,17 @@ public class Main extends Application {
                         if(game._getWinnerUserID() == game._getPlayer1UserID())
                         {
                             //Player 1 victory
+                            HistoryFile.RecordWin(game._getPlayer1UserID());
+                            HistoryFile.RecordLoss(game._getPlayer1UserID());
                         }
                         else if(game._getWinnerUserID() == game._getPlayer2UserID())
                         {
                             //Player 2 victory
-                        }
-                        else
+                            HistoryFile.RecordWin(game._getPlayer2UserID());
+                            HistoryFile.RecordLoss(game._getPlayer1UserID());
+                        }else
                         {
-                            //We fucked up
+                            System.out.println("Nobody Won?");
                         }
                     }
 
@@ -158,18 +162,31 @@ public class Main extends Application {
         }
     }
 
-    private void _clearPieces()
+    public void _clearPieces()
     {
         this.pieceGroup.getChildren().clear();
     }
 
     @Override
     public void start (Stage primaryStage) throws Exception {
-        //Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        gameStage = primaryStage;
+
+        changeScene("GameOver.fxml");
+        gameStage.show();
+
+
+    }
+    public void changeScene(String fxml) throws IOException {
+        Parent pane = FXMLLoader.load(
+                getClass().getResource(fxml));
+
+        Scene scene = new Scene(pane);
+        gameStage.setScene(scene);
+    }
+    public void changeGameScene(){
         Scene scene = new Scene(createContent());
-        primaryStage.setTitle("Checkers");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        gameStage.setTitle("Checkers");
+        gameStage.setScene(scene);
     }
 
     private int toBoard(double pixel){
