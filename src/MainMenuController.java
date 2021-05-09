@@ -37,7 +37,14 @@ public class MainMenuController implements Initializable {
     }
 
     public void game_screen_swap(ActionEvent actionEvent) {
-        gamescreen.changeGameScene();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
+            Stage stage = (Stage) playButton.getScene().getWindow();
+            Scene scene = new Scene(loader.load());
+            stage.setScene(scene);
+        }catch (IOException io){
+            io.printStackTrace();
+        }
 
 
     }

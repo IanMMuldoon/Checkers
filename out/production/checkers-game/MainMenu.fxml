@@ -15,7 +15,7 @@
       </Text>
       <VBox alignment="TOP_CENTER" layoutX="232.0" layoutY="128.0" prefHeight="145.0" prefWidth="137.0" spacing="30.0">
          <children>
-            <Button fx:id="playButton" mnemonicParsing="false" onAction="#game_screen_swap" text="Play" textAlignment="CENTER" textFill="#583415" />
+            <Button fx:id="playButton" mnemonicParsing="false" onAction="#game_screen_swap" text="Login" textAlignment="CENTER" textFill="#583415" />
             <Button fx:id="matchHistoryButton" mnemonicParsing="false" onAction="#match_history_swap" text="Match History" textFill="#583415" />
             <Button fx:id="quitButton" mnemonicParsing="false" onAction="#quit" text="Quit" textFill="#583415" />
          </children>
