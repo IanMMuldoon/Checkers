@@ -4,51 +4,37 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
-public class Main extends Application {
+public class GameScreen extends Application {
     public static final int TILE_SIZE = 100;
     public static final int WIDTH = 8;
     public static final int HEIGHT = 8;
+    private static Stage gameStage;
 
     private Game game = new Game(1, 2);
 
     private Group tileGroup = new Group(); //separate Group for tiles and pieces so pieces are on top of tiles
     private Group pieceGroup = new Group();
 
-    private Button takeback;
-    private Button forfeit;
-    private Button retMenu;
 
-    private Parent createContent() throws IOException {
-        BorderPane root = new BorderPane();
-        Pane board = new Pane();
-        Pane sidePane = FXMLLoader.load(getClass().getResource("/SideMenu.fxml"));
-        board.setPrefSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
-        board.getChildren().addAll(tileGroup, pieceGroup);
 
-        this.setButtons(sidePane);
-
-        root.setCenter(board);
-        root.setLeft(sidePane);
+    public Parent createContent()
+    {
+        Pane root = new Pane();
+        root.setPrefSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
+        root.getChildren().addAll(tileGroup, pieceGroup);
 
         this.DrawTiles();
         this.DrawPieces();
 
         return root;
-    }
-
-    private void setButtons (Pane Parent) throws IOException {
-        takeback = (Button) Parent.getChildren().get(0);
-        forfeit = (Button) Parent.getChildren().get(1);
-        retMenu = (Button) Parent.getChildren().get(2);
     }
 
     public void DrawTiles() {
@@ -73,19 +59,6 @@ public class Main extends Application {
 
                 //Make copy of iterator to pass to event
                 Piece piece = game._pieces[i];
-
-                takeback.setOnMouseClicked(mouseEvent -> {          //Need to have prompt, then logic for take back
-
-                });
-
-                forfeit.setOnMouseClicked(mouseEvent -> {           //Need to find which player's turn it is, then end game
-
-                });
-
-                retMenu.setOnMouseClicked(mouseEvent -> {           //End game and return to menu, when menu is made
-
-                });
-
 
                 game._pieces[i].setOnMousePressed(e ->
                 {
@@ -127,7 +100,6 @@ public class Main extends Application {
 
                     if (game.isGameOver())
                     {
-                        System.out.println("Game Over!");
 
                         this._clearPieces();
 
@@ -140,14 +112,17 @@ public class Main extends Application {
                         if(game._getWinnerUserID() == game._getPlayer1UserID())
                         {
                             //Player 1 victory
+                            HistoryFile.RecordWin(game._getPlayer1UserID());
+                            HistoryFile.RecordLoss(game._getPlayer1UserID());
                         }
                         else if(game._getWinnerUserID() == game._getPlayer2UserID())
                         {
                             //Player 2 victory
-                        }
-                        else
+                            HistoryFile.RecordWin(game._getPlayer2UserID());
+                            HistoryFile.RecordLoss(game._getPlayer1UserID());
+                        }else
                         {
-                            //We fucked up
+                            System.out.println("Nobody Won?");
                         }
                     }
 
@@ -188,18 +163,32 @@ public class Main extends Application {
         }
     }
 
-    private void _clearPieces()
+    public void _clearPieces()
     {
         this.pieceGroup.getChildren().clear();
     }
 
     @Override
     public void start (Stage primaryStage) throws Exception {
-        //Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        gameStage = primaryStage;
+        gameStage.initStyle(StageStyle.UNDECORATED);
+        gameStage.setScene(new Scene(createContent(), 600, 400));
+        changeScene("MainMenu.fxml");
+        gameStage.show();
+
+
+    }
+    public void changeScene(String fxml) throws IOException {
+        Parent pane = FXMLLoader.load(
+                getClass().getResource(fxml));
+
+        Scene scene = new Scene(pane);
+        gameStage.setScene(scene);
+    }
+    public void changeGameScene(){
         Scene scene = new Scene(createContent());
-        primaryStage.setTitle("Checkers");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        gameStage.setTitle("Checkers");
+        gameStage.setScene(scene);
     }
 
     private int toBoard(double pixel){
