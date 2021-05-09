@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class GameScreen extends Application {
     public static final int TILE_SIZE = 100;
@@ -170,6 +171,7 @@ public class GameScreen extends Application {
     @Override
     public void start (Stage primaryStage) throws Exception {
         gameStage = primaryStage;
+        gameStage.initStyle(StageStyle.UNDECORATED);
         changeScene("MainMenu.fxml");
         gameStage.show();
 

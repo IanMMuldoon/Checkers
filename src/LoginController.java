@@ -25,6 +25,10 @@ public class LoginController implements Initializable{
     @FXML
     private TextField PlayerTwo;
 
+    GameScreen gamescreen = new GameScreen();
+
+
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -47,6 +51,12 @@ public class LoginController implements Initializable{
         }
         else if (PlayerTwo.getText().isBlank()){
             loginMessageLabel.setText("Please enter name for Player Two");
+        }
+        else{
+            HistoryFile.SaveName(PlayerOne.getText());
+            HistoryFile.SaveName(PlayerTwo.getText());
+            gamescreen.changeGameScene();
+
         }
 
     }
