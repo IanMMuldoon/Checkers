@@ -1,4 +1,5 @@
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
@@ -33,9 +34,6 @@ public class GameScreen extends Application {
         this.DrawPieces();
 
         return root;
-    }
-    public static Stage getStage(){
-        return gameStage;
     }
 
     public void DrawTiles() {
@@ -171,13 +169,24 @@ public class GameScreen extends Application {
 
     @Override
     public void start (Stage primaryStage) throws Exception {
-        //Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         gameStage = primaryStage;
+
+        changeScene("GameOver.fxml");
+        gameStage.show();
+
+
+    }
+    public void changeScene(String fxml) throws IOException {
+        Parent pane = FXMLLoader.load(
+                getClass().getResource(fxml));
+
+        Scene scene = new Scene(pane);
+        gameStage.setScene(scene);
+    }
+    public void changeGameScene(){
         Scene scene = new Scene(createContent());
         gameStage.setTitle("Checkers");
         gameStage.setScene(scene);
-        gameStage.show();
-
     }
 
     private int toBoard(double pixel){

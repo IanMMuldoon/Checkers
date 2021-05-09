@@ -30,6 +30,7 @@ public class GameOverController {
         gamescreen._clearPieces();
         game._reset();
         gamescreen.DrawPieces();
+        gamescreen.changeGameScene();
     }
     public void handleMenuButton(){
 
