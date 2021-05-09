@@ -24,7 +24,6 @@ public class Main extends Application {
     private Group pieceGroup = new Group();
 
     private Button takeback;
-    private Button changeColors;
     private Button forfeit;
     private Button retMenu;
 
@@ -48,9 +47,8 @@ public class Main extends Application {
 
     private void setButtons (Pane Parent) throws IOException {
         takeback = (Button) Parent.getChildren().get(0);
-        changeColors = (Button) Parent.getChildren().get(1);
-        forfeit = (Button) Parent.getChildren().get(2);
-        retMenu = (Button) Parent.getChildren().get(3);
+        forfeit = (Button) Parent.getChildren().get(1);
+        retMenu = (Button) Parent.getChildren().get(2);
     }
 
     public void DrawTiles() {
@@ -77,10 +75,6 @@ public class Main extends Application {
                 Piece piece = game._pieces[i];
 
                 takeback.setOnMouseClicked(mouseEvent -> {          //Need to have prompt, then logic for take back
-
-                });
-
-                changeColors.setOnMouseClicked(mouseEvent -> {          //For this, the only idea was to change colors of board
 
                 });
 
