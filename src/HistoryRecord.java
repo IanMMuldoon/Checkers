@@ -20,4 +20,11 @@ public class HistoryRecord
         this.Wins = Integer.parseInt(values[2]);
         this.Losses = Integer.parseInt(values[3]);
     }
+
+    @Override
+    public String toString() {
+        return Name +
+                ", Wins=" + Wins +
+                ", Losses=" + Losses;
+    }
 }

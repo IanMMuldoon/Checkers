@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Text?>
 
-<Pane prefHeight="800" prefWidth="200" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Main">
+<Pane prefHeight="800" prefWidth="200" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SideMenuController">
    <children>
       <Button fx:id="takeback" alignment="CENTER" contentDisplay="CENTER" layoutX="43.0" layoutY="150.0" mnemonicParsing="false" text="Propose Takeback" />
       <Button fx:id="forfeit" alignment="CENTER" contentDisplay="CENTER" layoutX="73.0" layoutY="250.0" mnemonicParsing="false" text="Forfeit" />
