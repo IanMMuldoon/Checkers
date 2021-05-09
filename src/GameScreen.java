@@ -170,8 +170,7 @@ public class GameScreen extends Application {
     @Override
     public void start (Stage primaryStage) throws Exception {
         gameStage = primaryStage;
-
-        changeScene("GameOver.fxml");
+        changeScene("MainMenu.fxml");
         gameStage.show();
 
 
