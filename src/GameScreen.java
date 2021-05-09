@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.*;
 import javafx.scene.Parent;
@@ -20,32 +21,17 @@ public class GameScreen extends Application {
 
     private Game game = new Game(1, 2);
 
-    private Group tileGroup = new Group(); //separate Group for tiles and pieces so pieces are on top of tiles
-    private Group pieceGroup = new Group();
+    private static Group tileGroup = new Group(); //separate Group for tiles and pieces so pieces are on top of tiles
+    private static Group pieceGroup = new Group(); //Is there a problem if these are static?
 
 
 
     public Parent createContent()
     {
-        BorderPane root = new BorderPane();
-        Pane board = new Pane();
-        Pane sidePane = null;
-        try {
-            sidePane = FXMLLoader.load(getClass().getResource("/SideMenu.fxml"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        board.setPrefSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
-        board.getChildren().addAll(tileGroup, pieceGroup);
-
-
         this.DrawTiles();
         this.DrawPieces();
 
-        root.setCenter(board);
-        root.setLeft(sidePane);
-
-        return root;
+        return changeSideScene("SideMenu.fxml");
     }
 
     public void DrawTiles() {
@@ -151,6 +137,25 @@ public class GameScreen extends Application {
         }
     }
 
+    public void takeBack (ActionEvent actionEvent) {
+        gameStage.setScene(new Scene(changeSideScene("TakeBackPrompt.fxml")));
+    }
+
+    public void forfeit (ActionEvent actionEvent) {
+        //Please add logic for returning to menu with player whose turn it currently is becoming the loser
+    }
+
+    public void retMenu (ActionEvent actionEvent) {
+        //Please add logic for returning to menu without saving stats
+    }
+
+    public void Yes (ActionEvent actionEvent) {
+        //Please add logic for taking back move
+    }
+
+    public void No (ActionEvent actionEvent) {
+        gameStage.setScene(new Scene(changeSideScene("SideMenu.fxml")));
+    }
     private void _removeMissingPieces()
     {
         List<Piece> pieces = new ArrayList<>(Arrays.asList(game._pieces));
@@ -200,6 +205,25 @@ public class GameScreen extends Application {
         Scene scene = new Scene(createContent());
         gameStage.setTitle("Checkers");
         gameStage.setScene(scene);
+    }
+
+    public Pane changeSideScene(String fxml){
+        String PassMe = fxml;
+        BorderPane root = new BorderPane();
+        Pane board = new Pane();
+        Pane sidePane = null;
+        try {
+            sidePane = FXMLLoader.load(getClass().getResource(PassMe));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        board.setPrefSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
+        board.getChildren().addAll(tileGroup, pieceGroup);
+
+        root.setCenter(board);
+        root.setLeft(sidePane);
+
+        return root;
     }
 
     private int toBoard(double pixel){

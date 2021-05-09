@@ -40,6 +40,7 @@ public class LoginController implements Initializable{
     }
 
     public void backButtonAction(ActionEvent event) {
+        System.out.println("pressed");
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("MainMenu.fxml"));
             Stage stage = (Stage) backButton.getScene().getWindow();
