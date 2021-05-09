@@ -14,6 +14,7 @@ public class GameScreen extends Application {
     public static final int TILE_SIZE = 100;
     public static final int WIDTH = 8;
     public static final int HEIGHT = 8;
+    private static Stage gameStage;
 
     private Game game = new Game(1, 2);
 
@@ -22,7 +23,7 @@ public class GameScreen extends Application {
 
 
 
-    private Parent createContent()
+    public Parent createContent()
     {
         Pane root = new Pane();
         root.setPrefSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
@@ -32,6 +33,9 @@ public class GameScreen extends Application {
         this.DrawPieces();
 
         return root;
+    }
+    public static Stage getStage(){
+        return gameStage;
     }
 
     public void DrawTiles() {
@@ -168,10 +172,12 @@ public class GameScreen extends Application {
     @Override
     public void start (Stage primaryStage) throws Exception {
         //Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        gameStage = primaryStage;
         Scene scene = new Scene(createContent());
-        primaryStage.setTitle("Checkers");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        gameStage.setTitle("Checkers");
+        gameStage.setScene(scene);
+        gameStage.show();
+
     }
 
     private int toBoard(double pixel){
