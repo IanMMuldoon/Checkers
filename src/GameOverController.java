@@ -11,7 +11,7 @@ import javafx.scene.*;
 import javafx.stage.Stage;
 
 
-
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -20,7 +20,6 @@ import java.util.ResourceBundle;
 public class GameOverController {
     private Game game = new Game(1,2);
     private GameScreen gamescreen = new GameScreen();
-    private GameOverMain gameovermain = new GameOverMain();
     public Button rematchButton;
     public Button menuButton;
     public Button quitButton;
@@ -33,7 +32,11 @@ public class GameOverController {
         gamescreen.changeGameScene();
     }
     public void handleMenuButton(){
-
+        try {
+            gamescreen.changeScene("MainMenu.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     public void handleQuitButton(){
 

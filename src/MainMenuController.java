@@ -1,3 +1,4 @@
+import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 
@@ -8,9 +9,17 @@ public class MainMenuController implements Initializable {
     public Button playButton;
     public Button matchHistoryButton;
     public Button quitButton;
+    private GameScreen gamescreen = new GameScreen();
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
 
+
+    public void handlePlayButton() {
+        gamescreen.changeGameScene();
+    }
+
+    public void handleHistoryButton() {
+    }
+
+    public void handleQuitButton() {
     }
 }

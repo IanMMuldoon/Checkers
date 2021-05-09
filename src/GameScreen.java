@@ -171,7 +171,7 @@ public class GameScreen extends Application {
     public void start (Stage primaryStage) throws Exception {
         gameStage = primaryStage;
 
-        changeScene("GameOver.fxml");
+        changeScene("MainMenu.fxml");
         gameStage.show();
 
 
