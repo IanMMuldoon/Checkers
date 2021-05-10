@@ -8,7 +8,8 @@
    <children>
       <Button fx:id="takeback" alignment="CENTER" contentDisplay="CENTER" layoutX="43.0" layoutY="150.0" mnemonicParsing="false" onAction="#takeBack" text="Propose Takeback" />
       <Button fx:id="forfeit" alignment="CENTER" contentDisplay="CENTER" layoutX="73.0" layoutY="250.0" mnemonicParsing="false" onAction="#forfeit" text="Forfeit" />
-      <Button fx:id="retMenu" alignment="CENTER" contentDisplay="CENTER" layoutX="48.0" layoutY="350.0" mnemonicParsing="false" onAction="#retMenu" text="Return to Menu" />
+      <Button fx:id="draw" alignment="CENTER" contentDisplay="CENTER" layoutX="73.0" layoutY="350.0" mnemonicParsing="false" onAction="#draw" text="Draw" />
+      <Button fx:id="retMenu" alignment="CENTER" contentDisplay="CENTER" layoutX="48.0" layoutY="450.0" mnemonicParsing="false" onAction="#retMenu" text="Return to Menu" />
       <Text layoutX="75.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Options" />
    </children>
 </Pane>

@@ -10,6 +10,7 @@ import javafx.scene.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -122,7 +123,6 @@ public class GameScreen extends Application {
                             System.out.println("Nobody Won?");
                         }
                     }
-
                 });
 
                 try
@@ -141,21 +141,83 @@ public class GameScreen extends Application {
         gameStage.setScene(new Scene(changeSideScene("TakeBackPrompt.fxml")));
     }
 
-    public void forfeit (ActionEvent actionEvent) {
-        //Please add logic for returning to menu with player whose turn it currently is becoming the loser
+    public void forfeit (ActionEvent actionEvent) throws IOException {
+        BorderPane root = new BorderPane();
+        Pane board = new Pane();
+        Pane sidePane = null;
+        Text Message = null;
+        try {
+            sidePane = FXMLLoader.load(getClass().getResource("ForfeitMessage.fxml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        board.setPrefSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
+        board.getChildren().addAll(tileGroup, pieceGroup);
+
+        Message = (Text) sidePane.getChildren().get(0);
+
+        Message.setText("Player " + game._getCurrentPlayerID() + " has forfeit!");
+
+        root.setCenter(board);
+        root.setLeft(sidePane);
+
+        gameStage.setScene(new Scene(root));
+
     }
 
-    public void retMenu (ActionEvent actionEvent) {
-        //Please add logic for returning to menu without saving stats
+    public void FFRetMenu (ActionEvent actionEvent) throws IOException {
+        game._callForfeit();
+
+        this._clearPieces();
+
+        HistoryRecord[] records = HistoryFile.GetRecords();
+
+        if(game._getWinnerUserID() == game._getPlayer1UserID())
+        {
+            //Player 1 victory
+            HistoryFile.RecordWin(game._getPlayer1UserID());
+            HistoryFile.RecordLoss(game._getPlayer1UserID());
+        }
+        else if(game._getWinnerUserID() == game._getPlayer2UserID())
+        {
+            //Player 2 victory
+            HistoryFile.RecordWin(game._getPlayer2UserID());
+            HistoryFile.RecordLoss(game._getPlayer1UserID());
+        }else
+        {
+            System.out.println("Nobody Won?");
+        }
+
+        game._reset();
+        changeScene("MainMenu.fxml");
     }
 
-    public void Yes (ActionEvent actionEvent) {
-        //Please add logic for taking back move
+    public void draw (ActionEvent actionEvent) {
+        gameStage.setScene(new Scene(changeSideScene("DrawGamePrompt.fxml")));
+    }
+    
+    public void retMenu (ActionEvent actionEvent) throws IOException {
+        changeScene("MainMenu.fxml");
     }
 
-    public void No (ActionEvent actionEvent) {
+    public void YesTakeBack (ActionEvent actionEvent) {
+        game._proposedTakeback();
         gameStage.setScene(new Scene(changeSideScene("SideMenu.fxml")));
     }
+
+    public void NoTakeBack (ActionEvent actionEvent) {
+        gameStage.setScene(new Scene(changeSideScene("SideMenu.fxml")));
+    }
+
+    public void YesDraw (ActionEvent actionEvent) throws IOException {
+        game._callDraw();
+        changeScene("MainMenu.fxml");
+    }
+
+    public void NoDraw (ActionEvent actionEvent) {
+        gameStage.setScene(new Scene(changeSideScene("SideMenu.fxml")));
+    }
+
     private void _removeMissingPieces()
     {
         List<Piece> pieces = new ArrayList<>(Arrays.asList(game._pieces));
@@ -191,8 +253,6 @@ public class GameScreen extends Application {
         gameStage.setScene(new Scene(createContent()));
         changeScene("MainMenu.fxml");
         gameStage.show();
-
-
     }
     public void changeScene(String fxml) throws IOException {
         Parent pane = FXMLLoader.load(
@@ -208,12 +268,11 @@ public class GameScreen extends Application {
     }
 
     public Pane changeSideScene(String fxml){
-        String PassMe = fxml;
         BorderPane root = new BorderPane();
         Pane board = new Pane();
         Pane sidePane = null;
         try {
-            sidePane = FXMLLoader.load(getClass().getResource(PassMe));
+            sidePane = FXMLLoader.load(getClass().getResource(fxml));
         } catch (IOException e) {
             e.printStackTrace();
         }

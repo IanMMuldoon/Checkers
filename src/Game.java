@@ -438,6 +438,7 @@ public class Game
     private int toBoard(double pixel){
         return (int)(pixel + TILE_SIZE / 2) / TILE_SIZE;
     }
+
     public void _callForfeit(){
         if(this._currentPlayerID == this._player1UserID)
             this._winnerUserID = this._player2UserID;
@@ -477,7 +478,7 @@ public class Game
             if (piecetocopy != null)
                 newlist[i++] = piecetocopy;
             else{
-                newslist[i++] = piecetoadd;
+                newlist[i++] = piecetoadd;
                 break;
             }
         }
