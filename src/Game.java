@@ -16,7 +16,8 @@ public class Game
     private int _winnerUserID;
     private int _currentPlayerID;
 
-    private List<Turn> _moveHistory = new ArrayList<Turn>();
+    private List<Integer> _moveHistoryP1 = new ArrayList<Integer>(); //for proposed takeback
+    private  List<Integer> _moveHistoryP2 = new ArrayList<Integer>();
 
     private Piece _capturedPiece = null; //for proposed takeback
 
@@ -448,15 +449,25 @@ public class Game
     public void _callDraw(){
         this._winnerUserID = 0;
     }
+    //for proposed takeback
+    private int _convertPosition(int row, int position){
+        int i = 1;
+        int temp = position;
+        while(i<row){
+            temp += 4;
+            i++;
+        }
+        return temp;
+    }
     private void _updateMovesList(Piece piece, int to_row, int to_position){
-        Turn temp = new Turn();
-        temp._oldPosition = piece._position;
-        temp._oldRow = piece._row;
-        temp._newRow = to_row;
-        temp._newPosition = to_position;
-        temp._playerID = this._currentPlayerID;
-        
-        this._moveHistory.add(temp);
+        if(this._pieceIsPlayer1(piece)){
+            this._moveHistoryP1.add(_convertPosition(piece._row, piece._position));
+            this._moveHistoryP1.add(_convertPosition(to_row, to_position));
+        }
+        else{
+            this._moveHistoryP2.add(_convertPosition(piece._row, piece._position));
+            this._moveHistoryP2.add(_convertPosition(to_row, to_position));
+        }
     }
     private void _addPiece(Piece piecetoadd){ //adds captured piece when UNDO happens
         Piece[] newlist = new Piece[this._pieces.length - 1];
@@ -475,20 +486,45 @@ public class Game
         this._pieces = newlist;
     }
     public void _proposedTakeback(){
+        int to_row=1;
+        int from_row =1;
+        int to_position, from_position;
         Piece undoPiece;
-        Turn temp = this._moveHistory.get(this._moveHistory.size()-1);
 
-        undoPiece = this._getSquarePiece(temp._newRow, temp._newPosition);
-        undoPiece._row = temp._oldRow; //updates row of piece
-        undoPiece._position = temp._oldPosition; //updates position of piece to previous
+        if(this._currentPlayerID == this._player2UserID ){
+            to_position = this._moveHistoryP1.get(this._moveHistoryP1.size()-2); // new position after undo
+            from_position = this._moveHistoryP1.get(this._moveHistoryP1.size()-1); //current position
+        }
+        else{
+            to_position = this._moveHistoryP2.get(this._moveHistoryP2.size()-2);
+            from_position = this._moveHistoryP2.get(this._moveHistoryP2.size()-1);
+        }
+
+        while(to_position != 1 && to_position != 2 && to_position != 3 && to_position != 4){
+            to_position -= 4;
+            to_row++;
+        }
+        while(from_position != 1 && from_position != 2 && from_position !=3 && from_position != 4){
+            from_position -=4;
+            from_row++;
+        }
+
+        undoPiece = this._getSquarePiece(from_row, from_position);
+        undoPiece._row = to_row; //updates row of piece
+        undoPiece._position = to_position; //updates position of piece
 
         this._totalMoves--;
 
-        this._moveHistory.remove(this._moveHistory.size()-1);
-
-        if(this._capturedPiece != null){ //if piece was captured, add it back
-            this._addPiece(this._capturedPiece);
+        if(undoPiece._playerID == this._player1UserID){ // removes from history
+            this._moveHistoryP1.remove(this._moveHistoryP1.size()-1);
+            this._moveHistoryP1.remove(this._moveHistoryP1.size()-2);
         }
+        else{
+            this._moveHistoryP2.remove(this._moveHistoryP2.size()-1);
+            this._moveHistoryP2.remove(this._moveHistoryP2.size()-2);
+        }
+
+        this._addPiece(this._capturedPiece);
 
         this._toggleCurrentPlayer();
     }
