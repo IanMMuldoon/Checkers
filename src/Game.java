@@ -16,6 +16,11 @@ public class Game
     private int _winnerUserID;
     private int _currentPlayerID;
 
+    private List<Integer> _moveHistoryP1 = new ArrayList<Integer>(); //for proposed takeback
+    private  List<Integer> _moveHistoryP2 = new ArrayList<Integer>();
+
+    private Piece _capturedPiece = null; //for proposed takeback
+
     public Game(int player1userid, int player2userid)
     {
         this._player1UserID = player1userid;
@@ -353,8 +358,10 @@ public class Game
 
         if (this._canMovePiece(piece, to_row, to_position))
         {
+            this._updateMovesList(piece, to_row, to_position);
             piece._row = to_row;
             piece._position = to_position;
+            this._totalMoves++;
 
             Position convert = Position.getPieceXY(piece);
             piece.move(convert._x, convert._y);
@@ -363,6 +370,7 @@ public class Game
             if (this._pieceToCapture != null)
             {
                 //Remove the captured piece
+                this._capturedPiece = this._pieceToCapture;
                 this._removePiece(this._pieceToCapture);
                 this._pieceToCapture = null;
 
@@ -376,6 +384,7 @@ public class Game
                 this._mustJumpAgain = (this._canMovePiece(piece, piece._row + 2 * directionmodifier, piece._position - 1)
                         || this._canMovePiece(piece, piece._row + 2 * directionmodifier, piece._position + 1));
             }
+            else this._capturedPiece = null;
 
             if (!this._mustJumpAgain)
                 this._toggleCurrentPlayer();
@@ -429,4 +438,96 @@ public class Game
     private int toBoard(double pixel){
         return (int)(pixel + TILE_SIZE / 2) / TILE_SIZE;
     }
+    public void _callForfeit(){
+        if(this._currentPlayerID == this._player1UserID)
+            this._winnerUserID = this._player2UserID;
+        else
+            this._winnerUserID = this._player1UserID;
+    }
+
+    public void _callDraw(){
+        this._winnerUserID = 0;
+    }
+    //for proposed takeback
+    private int _convertPosition(int row, int position){
+        int i = 1;
+        int temp = position;
+        while(i<row){
+            temp += 4;
+            i++;
+        }
+        return temp;
+    }
+    private void _updateMovesList(Piece piece, int to_row, int to_position){
+        if(this._pieceIsPlayer1(piece)){
+            this._moveHistoryP1.add(_convertPosition(piece._row, piece._position));
+            this._moveHistoryP1.add(_convertPosition(to_row, to_position));
+        }
+        else{
+            this._moveHistoryP2.add(_convertPosition(piece._row, piece._position));
+            this._moveHistoryP2.add(_convertPosition(to_row, to_position));
+        }
+    }
+    private void _addPiece(Piece piecetoadd){ //adds captured piece when UNDO happens
+        Piece[] newlist = new Piece[this._pieces.length - 1];
+        int i = 0;
+
+        for (Piece piecetocopy : this._pieces)
+        {
+            if (piecetocopy != null)
+                newlist[i++] = piecetocopy;
+            else{
+                newslist[i++] = piecetoadd;
+                break;
+            }
+        }
+
+        this._pieces = newlist;
+    }
+    public void _proposedTakeback(){
+        int to_row=1;
+        int from_row =1;
+        int to_position, from_position;
+        Piece undoPiece;
+
+        if(this._currentPlayerID == this._player2UserID ){
+            to_position = this._moveHistoryP1.get(this._moveHistoryP1.size()-2); // new position after undo
+            from_position = this._moveHistoryP1.get(this._moveHistoryP1.size()-1); //current position
+        }
+        else{
+            to_position = this._moveHistoryP2.get(this._moveHistoryP2.size()-2);
+            from_position = this._moveHistoryP2.get(this._moveHistoryP2.size()-1);
+        }
+
+        while(to_position != 1 && to_position != 2 && to_position != 3 && to_position != 4){
+            to_position -= 4;
+            to_row++;
+        }
+        while(from_position != 1 && from_position != 2 && from_position !=3 && from_position != 4){
+            from_position -=4;
+            from_row++;
+        }
+
+        undoPiece = this._getSquarePiece(from_row, from_position);
+        undoPiece._row = to_row; //updates row of piece
+        undoPiece._position = to_position; //updates position of piece
+
+        this._totalMoves--;
+
+        if(undoPiece._playerID == this._player1UserID){ // removes from history
+            this._moveHistoryP1.remove(this._moveHistoryP1.size()-1);
+            this._moveHistoryP1.remove(this._moveHistoryP1.size()-2);
+        }
+        else{
+            this._moveHistoryP2.remove(this._moveHistoryP2.size()-1);
+            this._moveHistoryP2.remove(this._moveHistoryP2.size()-2);
+        }
+
+        this._addPiece(this._capturedPiece);
+
+        this._toggleCurrentPlayer();
+    }
+
+
+    
 }
