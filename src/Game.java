@@ -51,31 +51,26 @@ public class Game
             Piece piece = new Piece();
             piece.type = PieceType.White;
             piece._playerID = this._player2UserID;
-            piece._row = 8;
-            piece._position = 1;
-            pieces.add(piece);
-
-            piece = new Piece();
-            piece.type = PieceType.White;
-            piece._playerID = this._player2UserID;
             piece._isKing = true;
-            piece._row = 8;
+            piece._row = 1;
             piece._position = 2;
             pieces.add(piece);
 
             piece = new Piece();
             piece.type = PieceType.RED;
             piece._playerID = this._player1UserID;
-            piece._row = 7;
+            piece._row = 2;
             piece._position = 1;
             pieces.add(piece);
 
             piece = new Piece();
             piece.type = PieceType.RED;
             piece._playerID = this._player1UserID;
-            piece._row = 6;
-            piece._position = 2;
+            piece._row = 4;
+            piece._position = 1;
             pieces.add(piece);
+
+            this._currentPlayerID = this._player2UserID;
 
             this._pieces = pieces.toArray(new Piece[pieces.size()]);
 
@@ -346,6 +341,10 @@ public class Game
     private boolean _mustJumpAgain = false;
     public boolean getMustJumpAgain() { return this._mustJumpAgain; }
 
+    private Piece _previousMovePiece = null;
+    private Position _previousMoveFromPosition = null;
+    private Piece _previousMoveCapturedPiece = null;
+
     public boolean _movePiece(Piece piece, int to_row, int to_position)
     {
         boolean moved = false;
@@ -353,6 +352,10 @@ public class Game
 
         if (this._canMovePiece(piece, to_row, to_position))
         {
+            this._previousMoveCapturedPiece = this._pieceToCapture;
+            this._previousMovePiece = piece;
+            this._previousMoveFromPosition = new Position(piece._row, piece._position, 1);
+
             piece._row = to_row;
             piece._position = to_position;
 
@@ -373,8 +376,33 @@ public class Game
 
                 //return true if must jump again
                 //check if the piece is allowed to make another jump left or right
-                this._mustJumpAgain = (this._canMovePiece(piece, piece._row + 2 * directionmodifier, piece._position - 1)
-                        || this._canMovePiece(piece, piece._row + 2 * directionmodifier, piece._position + 1));
+//                this._mustJumpAgain = (this._canMovePiece(piece, piece._row + 2 * directionmodifier, piece._position - 1)
+//                        || this._canMovePiece(piece, piece._row + 2 * directionmodifier, piece._position + 1));
+
+                this._mustJumpAgain =
+                (
+                        (
+                                piece._isKing
+                                        &&  (
+                                        this._canMovePiece(piece, piece._row + 2, piece._position - 1)
+                                                ||
+                                                this._canMovePiece(piece, piece._row + 2, piece._position + 1)
+                                                ||
+                                                this._canMovePiece(piece, piece._row - 2, piece._position + 1)
+                                                ||
+                                                this._canMovePiece(piece, piece._row - 2, piece._position + 1)
+                                )
+                        )
+                                ||
+                                (
+                                        !piece._isKing
+                                                &&  (
+                                                this._canMovePiece(piece, piece._row + 2 * directionmodifier, piece._position - 1)
+                                                        ||
+                                                        this._canMovePiece(piece, piece._row + 2 * directionmodifier, piece._position + 1)
+                                        )
+                                )
+                );
             }
 
             if (!this._mustJumpAgain)
@@ -384,6 +412,36 @@ public class Game
         }
 
         return moved;
+    }
+
+    public void undoLastMove()
+    {
+        if (this._previousMovePiece == null)
+            return;
+
+        //Move the previous piece
+        this._previousMovePiece._row = this._previousMoveFromPosition._row;
+        this._previousMovePiece._position = this._previousMoveFromPosition._position;
+
+        //Check if need to add a piece back
+        this._addPiece(this._previousMoveCapturedPiece);
+    }
+
+    private void _addPiece(Piece piecetoadd)
+    {
+        if (piecetoadd == null)
+            return;
+
+        Piece[] newlist = new Piece[this._pieces.length + 1];
+        int i = 0;
+        for (Piece piecetocopy : this._pieces)
+        {
+            newlist[i++] = piecetocopy;
+        }
+
+        this._pieces = newlist;
+
+        this._pieces[this._pieces.length - 1] = piecetoadd;
     }
 
     private void _removePiece(Piece piecetoremove)

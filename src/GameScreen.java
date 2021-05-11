@@ -4,11 +4,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -20,21 +22,17 @@ public class GameScreen extends Application {
 
     private Game game = new Game(1, 2);
 
-    private Group tileGroup = new Group(); //separate Group for tiles and pieces so pieces are on top of tiles
-    private Group pieceGroup = new Group();
+    private static Group tileGroup = new Group(); //separate Group for tiles and pieces so pieces are on top of tiles
+    private static Group pieceGroup = new Group(); //Is there a problem if these are static?
 
 
 
     public Parent createContent()
     {
-        Pane root = new Pane();
-        root.setPrefSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
-        root.getChildren().addAll(tileGroup, pieceGroup);
-
         this.DrawTiles();
         this.DrawPieces();
 
-        return root;
+        return changeSideScene("SideMenu.fxml");
     }
 
     public void DrawTiles() {
@@ -125,7 +123,6 @@ public class GameScreen extends Application {
                             System.out.println("Nobody Won?");
                         }
                     }
-
                 });
 
                 try
@@ -138,6 +135,64 @@ public class GameScreen extends Application {
                 }
             }
         }
+    }
+
+    public void takeBack (ActionEvent actionEvent) {
+        gameStage.setScene(new Scene(changeSideScene("TakeBackPrompt.fxml")));
+    }
+
+    public void forfeit (ActionEvent actionEvent) throws IOException {
+        BorderPane root = new BorderPane();
+        Pane board = new Pane();
+        Pane sidePane = null;
+        Text Message = null;
+        try {
+            sidePane = FXMLLoader.load(getClass().getResource("ForfeitMessage.fxml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        board.setPrefSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
+        board.getChildren().addAll(tileGroup, pieceGroup);
+
+        Message = (Text) sidePane.getChildren().get(0);
+
+        Message.setText("Player " + game._getCurrentPlayerID() + " has forfeit!"); //This is always returning player 1
+
+        root.setCenter(board);
+        root.setLeft(sidePane);
+
+        gameStage.setScene(new Scene(root));
+    }
+
+    public void FFRetMenu (ActionEvent actionEvent) throws IOException {
+        game._reset();
+        changeScene("GameOver.fxml");
+    }
+
+    public void draw (ActionEvent actionEvent) {
+        gameStage.setScene(new Scene(changeSideScene("DrawGamePrompt.fxml")));
+    }
+    
+    public void retMenu (ActionEvent actionEvent) throws IOException {
+        game._reset();
+        changeScene("MainMenu.fxml");
+    }
+
+    public void YesTakeBack (ActionEvent actionEvent) {
+        gameStage.setScene(new Scene(changeSideScene("SideMenu.fxml")));
+    }
+
+    public void NoTakeBack (ActionEvent actionEvent) {
+        gameStage.setScene(new Scene(changeSideScene("SideMenu.fxml")));
+    }
+
+    public void YesDraw (ActionEvent actionEvent) throws IOException {
+        game._reset();
+        changeScene("GameOver.fxml");
+    }
+
+    public void NoDraw (ActionEvent actionEvent) {
+        gameStage.setScene(new Scene(changeSideScene("SideMenu.fxml")));
     }
 
     private void _removeMissingPieces()
@@ -171,12 +226,10 @@ public class GameScreen extends Application {
     @Override
     public void start (Stage primaryStage) throws Exception {
         gameStage = primaryStage;
-        gameStage.initStyle(StageStyle.UNDECORATED);
-        gameStage.setScene(new Scene(createContent(), 600, 400));
+//        gameStage.initStyle(StageStyle.UNDECORATED);
+        gameStage.setScene(new Scene(createContent()));
         changeScene("MainMenu.fxml");
         gameStage.show();
-
-
     }
     public void changeScene(String fxml) throws IOException {
         Parent pane = FXMLLoader.load(
@@ -189,6 +242,24 @@ public class GameScreen extends Application {
         Scene scene = new Scene(createContent());
         gameStage.setTitle("Checkers");
         gameStage.setScene(scene);
+    }
+
+    public Pane changeSideScene(String fxml){
+        BorderPane root = new BorderPane();
+        Pane board = new Pane();
+        Pane sidePane = null;
+        try {
+            sidePane = FXMLLoader.load(getClass().getResource(fxml));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        board.setPrefSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
+        board.getChildren().addAll(tileGroup, pieceGroup);
+
+        root.setCenter(board);
+        root.setLeft(sidePane);
+
+        return root;
     }
 
     private int toBoard(double pixel){
