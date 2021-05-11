@@ -6,19 +6,18 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameOverController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #e2b08c; -fx-border-color: #583415;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameOverController">
    <children>
       <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Game Over" textAlignment="CENTER" translateY="20.0">
                <font>
-                  <Font size="34.0" />
+                  <Font name="Comic Sans MS" size="34.0" />
                </font>
             </Text>
-            <Button fx:id="rematchButton" onAction="#handleReMatchButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="110.0" text="Rematch" translateY="100.0" />
-            <Button fx:id="menuButton" onAction="#handleMenuButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="110.0" text="Main Menu" translateY="150.0" />
-            <Button fx:id="quitButton" onAction="#handleQuitButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="110.0" text="Quit" translateY="200.0" />
+            <Button fx:id="rematchButton" mnemonicParsing="false" onAction="#handleReMatchButton" prefHeight="25.0" prefWidth="110.0" text="Rematch" translateY="100.0" />
+            <Button fx:id="menuButton" mnemonicParsing="false" onAction="#handleMenuButton" prefHeight="25.0" prefWidth="110.0" text="Main Menu" translateY="150.0" />
+            <Button fx:id="quitButton" mnemonicParsing="false" onAction="#handleQuitButton" prefHeight="25.0" prefWidth="110.0" text="Quit" translateY="200.0" />
          </children>
       </VBox>
    </children>
