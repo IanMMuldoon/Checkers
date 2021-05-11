@@ -15,7 +15,6 @@ public class Position {
         _row = row;
         _position = position;
         _isValid = true;
-
     }
     public Position(boolean Valid){
         _isValid = Valid;

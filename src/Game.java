@@ -3,7 +3,7 @@ import java.util.List;
 
 public class Game
 {
-    private boolean DEBUG = false;
+    private boolean DEBUG = true;
     public static final int TILE_SIZE = 100;
     public static final int WIDTH = 8;
     public static final int HEIGHT = 8;
@@ -15,10 +15,6 @@ public class Game
     private int _totalMoves;
     private int _winnerUserID;
     private int _currentPlayerID;
-
-    private List<Turn> _moveHistory = new ArrayList<Turn>();
-
-    private Piece _capturedPiece = null; //for proposed takeback
 
     public Game(int player1userid, int player2userid)
     {
@@ -55,31 +51,26 @@ public class Game
             Piece piece = new Piece();
             piece.type = PieceType.White;
             piece._playerID = this._player2UserID;
-            piece._row = 8;
-            piece._position = 1;
-            pieces.add(piece);
-
-            piece = new Piece();
-            piece.type = PieceType.White;
-            piece._playerID = this._player2UserID;
             piece._isKing = true;
-            piece._row = 8;
+            piece._row = 1;
             piece._position = 2;
             pieces.add(piece);
 
             piece = new Piece();
             piece.type = PieceType.RED;
             piece._playerID = this._player1UserID;
-            piece._row = 7;
+            piece._row = 2;
             piece._position = 1;
             pieces.add(piece);
 
             piece = new Piece();
             piece.type = PieceType.RED;
             piece._playerID = this._player1UserID;
-            piece._row = 6;
-            piece._position = 2;
+            piece._row = 4;
+            piece._position = 1;
             pieces.add(piece);
+
+            this._currentPlayerID = this._player2UserID;
 
             this._pieces = pieces.toArray(new Piece[pieces.size()]);
 
@@ -350,6 +341,10 @@ public class Game
     private boolean _mustJumpAgain = false;
     public boolean getMustJumpAgain() { return this._mustJumpAgain; }
 
+    private Piece _previousMovePiece = null;
+    private Position _previousMoveFromPosition = null;
+    private Piece _previousMoveCapturedPiece = null;
+
     public boolean _movePiece(Piece piece, int to_row, int to_position)
     {
         boolean moved = false;
@@ -357,10 +352,12 @@ public class Game
 
         if (this._canMovePiece(piece, to_row, to_position))
         {
-            this._updateMovesList(piece, to_row, to_position);
+            this._previousMoveCapturedPiece = this._pieceToCapture;
+            this._previousMovePiece = piece;
+            this._previousMoveFromPosition = new Position(piece._row, piece._position, 1);
+
             piece._row = to_row;
             piece._position = to_position;
-            this._totalMoves++;
 
             Position convert = Position.getPieceXY(piece);
             piece.move(convert._x, convert._y);
@@ -369,7 +366,6 @@ public class Game
             if (this._pieceToCapture != null)
             {
                 //Remove the captured piece
-                this._capturedPiece = this._pieceToCapture;
                 this._removePiece(this._pieceToCapture);
                 this._pieceToCapture = null;
 
@@ -380,10 +376,34 @@ public class Game
 
                 //return true if must jump again
                 //check if the piece is allowed to make another jump left or right
-                this._mustJumpAgain = (this._canMovePiece(piece, piece._row + 2 * directionmodifier, piece._position - 1)
-                        || this._canMovePiece(piece, piece._row + 2 * directionmodifier, piece._position + 1));
+//                this._mustJumpAgain = (this._canMovePiece(piece, piece._row + 2 * directionmodifier, piece._position - 1)
+//                        || this._canMovePiece(piece, piece._row + 2 * directionmodifier, piece._position + 1));
+
+                this._mustJumpAgain =
+                (
+                        (
+                                piece._isKing
+                                        &&  (
+                                        this._canMovePiece(piece, piece._row + 2, piece._position - 1)
+                                                ||
+                                                this._canMovePiece(piece, piece._row + 2, piece._position + 1)
+                                                ||
+                                                this._canMovePiece(piece, piece._row - 2, piece._position + 1)
+                                                ||
+                                                this._canMovePiece(piece, piece._row - 2, piece._position + 1)
+                                )
+                        )
+                                ||
+                                (
+                                        !piece._isKing
+                                                &&  (
+                                                this._canMovePiece(piece, piece._row + 2 * directionmodifier, piece._position - 1)
+                                                        ||
+                                                        this._canMovePiece(piece, piece._row + 2 * directionmodifier, piece._position + 1)
+                                        )
+                                )
+                );
             }
-            else this._capturedPiece = null;
 
             if (!this._mustJumpAgain)
                 this._toggleCurrentPlayer();
@@ -392,6 +412,36 @@ public class Game
         }
 
         return moved;
+    }
+
+    public void undoLastMove()
+    {
+        if (this._previousMovePiece == null)
+            return;
+
+        //Move the previous piece
+        this._previousMovePiece._row = this._previousMoveFromPosition._row;
+        this._previousMovePiece._position = this._previousMoveFromPosition._position;
+
+        //Check if need to add a piece back
+        this._addPiece(this._previousMoveCapturedPiece);
+    }
+
+    private void _addPiece(Piece piecetoadd)
+    {
+        if (piecetoadd == null)
+            return;
+
+        Piece[] newlist = new Piece[this._pieces.length + 1];
+        int i = 0;
+        for (Piece piecetocopy : this._pieces)
+        {
+            newlist[i++] = piecetocopy;
+        }
+
+        this._pieces = newlist;
+
+        this._pieces[this._pieces.length - 1] = piecetoadd;
     }
 
     private void _removePiece(Piece piecetoremove)
@@ -437,63 +487,4 @@ public class Game
     private int toBoard(double pixel){
         return (int)(pixel + TILE_SIZE / 2) / TILE_SIZE;
     }
-
-    public void _callForfeit(){
-        if(this._currentPlayerID == this._player1UserID)
-            this._winnerUserID = this._player2UserID;
-        else
-            this._winnerUserID = this._player1UserID;
-    }
-
-    public void _callDraw(){
-        this._winnerUserID = 0;
-    }
-    private void _updateMovesList(Piece piece, int to_row, int to_position){
-        Turn temp = new Turn();
-        temp._oldPosition = piece._position;
-        temp._oldRow = piece._row;
-        temp._newRow = to_row;
-        temp._newPosition = to_position;
-        temp._playerID = this._currentPlayerID;
-        
-        this._moveHistory.add(temp);
-
-    }
-    private void _addPiece(Piece piecetoadd){ //adds captured piece when UNDO happens
-        Piece[] newlist = new Piece[this._pieces.length - 1];
-        int i = 0;
-
-        for (Piece piecetocopy : this._pieces)
-        {
-            if (piecetocopy != null)
-                newlist[i++] = piecetocopy;
-            else{
-                newlist[i++] = piecetoadd;
-                break;
-            }
-        }
-
-        this._pieces = newlist;
-    }
-    public void _proposedTakeback(){
-        if(this._totalMoves != 0){
-            Piece undoPiece;
-            Turn temp = this._moveHistory.get(this._moveHistory.size()-1);
-            undoPiece = this._getSquarePiece(temp._newRow, temp._newPosition);
-            undoPiece._row = temp._oldRow; //updates row of piece
-            undoPiece._position = temp._oldPosition; //updates position of piece to previous
-
-            this._totalMoves--;
-
-            this._moveHistory.remove(this._moveHistory.size()-1);
-
-            if(this._capturedPiece != null){ //if piece was captured, add it back
-                this._addPiece(this._capturedPiece);
-            }
-            this._toggleCurrentPlayer();
-        }
-    }
-
-
-    
 }

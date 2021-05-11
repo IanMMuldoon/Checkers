@@ -156,40 +156,17 @@ public class GameScreen extends Application {
 
         Message = (Text) sidePane.getChildren().get(0);
 
-        Message.setText("Player " + game._getCurrentPlayerID() + " has forfeit!");
+        Message.setText("Player " + game._getCurrentPlayerID() + " has forfeit!"); //This is always returning player 1
 
         root.setCenter(board);
         root.setLeft(sidePane);
 
         gameStage.setScene(new Scene(root));
-
     }
 
     public void FFRetMenu (ActionEvent actionEvent) throws IOException {
-        game._callForfeit();
-
-        this._clearPieces();
-
-        HistoryRecord[] records = HistoryFile.GetRecords();
-
-        if(game._getWinnerUserID() == game._getPlayer1UserID())
-        {
-            //Player 1 victory
-            HistoryFile.RecordWin(game._getPlayer1UserID());
-            HistoryFile.RecordLoss(game._getPlayer1UserID());
-        }
-        else if(game._getWinnerUserID() == game._getPlayer2UserID())
-        {
-            //Player 2 victory
-            HistoryFile.RecordWin(game._getPlayer2UserID());
-            HistoryFile.RecordLoss(game._getPlayer1UserID());
-        }else
-        {
-            System.out.println("Nobody Won?");
-        }
-
         game._reset();
-        changeScene("MainMenu.fxml");
+        changeScene("GameOver.fxml");
     }
 
     public void draw (ActionEvent actionEvent) {
@@ -197,11 +174,11 @@ public class GameScreen extends Application {
     }
     
     public void retMenu (ActionEvent actionEvent) throws IOException {
+        game._reset();
         changeScene("MainMenu.fxml");
     }
 
     public void YesTakeBack (ActionEvent actionEvent) {
-        game._proposedTakeback();
         gameStage.setScene(new Scene(changeSideScene("SideMenu.fxml")));
     }
 
@@ -210,8 +187,8 @@ public class GameScreen extends Application {
     }
 
     public void YesDraw (ActionEvent actionEvent) throws IOException {
-        game._callDraw();
-        changeScene("MainMenu.fxml");
+        game._reset();
+        changeScene("GameOver.fxml");
     }
 
     public void NoDraw (ActionEvent actionEvent) {
