@@ -1,15 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<Pane prefHeight="800" prefWidth="200" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameScreen">
+<Pane prefHeight="800" prefWidth="200" style="-fx-background-color: #e2b08c" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameScreen">
    <children>
-      <Button fx:id="takeback" alignment="CENTER" contentDisplay="CENTER" layoutX="43.0" layoutY="150.0" mnemonicParsing="false" onAction="#takeBack" text="Propose Takeback" />
-      <Button fx:id="forfeit" alignment="CENTER" contentDisplay="CENTER" layoutX="73.0" layoutY="250.0" mnemonicParsing="false" onAction="#forfeit" text="Forfeit" />
-      <Button fx:id="draw" alignment="CENTER" contentDisplay="CENTER" layoutX="73.0" layoutY="350.0" mnemonicParsing="false" onAction="#draw" text="Draw" />
-      <Button fx:id="retMenu" alignment="CENTER" contentDisplay="CENTER" layoutX="48.0" layoutY="450.0" mnemonicParsing="false" onAction="#retMenu" text="Return to Menu" />
-      <Text layoutX="75.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Options" />
+      <Button fx:id="forfeit" alignment="CENTER" contentDisplay="CENTER" layoutX="66.0" layoutY="300.0" mnemonicParsing="false" onAction="#forfeit" text="Forfeit">
+         <font>
+            <Font name="Comic Sans MS" size="14.0" />
+         </font></Button>
+      <Button fx:id="draw" alignment="CENTER" contentDisplay="CENTER" layoutX="72.0" layoutY="200.0" mnemonicParsing="false" onAction="#draw" text="Draw">
+         <font>
+            <Font name="Comic Sans MS" size="14.0" />
+         </font></Button>
+      <Button fx:id="retMenu" alignment="CENTER" contentDisplay="CENTER" layoutX="39.0" layoutY="400.0" mnemonicParsing="false" onAction="#retMenu" text="Return to Menu">
+         <font>
+            <Font name="Comic Sans MS" size="14.0" />
+         </font></Button>
+      <Text layoutX="70.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Checkers">
+         <font>
+            <Font name="Comic Sans MS" size="14.0" />
+         </font></Text>
    </children>
 </Pane>

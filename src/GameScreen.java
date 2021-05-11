@@ -164,7 +164,7 @@ public class GameScreen extends Application {
         gameStage.setScene(new Scene(root));
     }
 
-    public void FFRetMenu (ActionEvent actionEvent) throws IOException {
+    public void ForfeitRetMenu (ActionEvent actionEvent) throws IOException {
         game._reset();
         changeScene("GameOver.fxml");
     }

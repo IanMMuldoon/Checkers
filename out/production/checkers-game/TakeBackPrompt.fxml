@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameScreen">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="200.0" style="-fx-background-color: #e2b08c;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameScreen">
    <children>
-      <Text layoutX="42.0" layoutY="143.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Undo previous move?" />
-      <Button fx:id="YesTakeBack" layoutX="25.0" layoutY="230.0" mnemonicParsing="false" onAction="#YesTakeBack" text="Yes" />
-      <Button fx:id="NotakeBack" layoutX="141.0" layoutY="230.0" mnemonicParsing="false" onAction="#NoTakeBack" text="No" />
+      <Text layoutX="32.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Undo previous move?">
+         <font>
+            <Font name="Comic Sans MS" size="14.0" />
+         </font></Text>
+      <Button fx:id="YesTakeBack" layoutX="32.0" layoutY="230.0" mnemonicParsing="false" onAction="#YesTakeBack" text="Yes">
+         <font>
+            <Font name="Comic Sans MS" size="14.0" />
+         </font></Button>
+      <Button fx:id="NotakeBack" layoutX="129.0" layoutY="230.0" mnemonicParsing="false" onAction="#NoTakeBack" text="No">
+         <font>
+            <Font name="Comic Sans MS" size="14.0" />
+         </font></Button>
    </children>
 </Pane>
