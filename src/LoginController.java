@@ -29,6 +29,12 @@ public class LoginController implements Initializable{
     @FXML
     private TextField PlayerTwo;
 
+    public static String PlayerOneName;
+    public static String PlayerTwoName;
+
+    public static int PlayerOneID;
+    public static int PlayerTwoID;
+
     GameScreen gamescreen = new GameScreen();
 
 
@@ -63,9 +69,11 @@ public class LoginController implements Initializable{
             loginMessageLabel.setText("Please enter name for Player Two");
         }
         else{
-            HistoryFile.SaveName(PlayerOne.getText());
-            HistoryFile.SaveName(PlayerTwo.getText());
-            gamescreen.changeGameScene();
+          HistoryFile.SaveName(PlayerOne.getText());
+          HistoryFile.SaveName(PlayerTwo.getText());
+          PlayerOneName = PlayerOne.getText();
+          PlayerTwoName = PlayerTwo.getText();
+          gamescreen.changeGameScene();
 
         }
 
@@ -73,5 +81,29 @@ public class LoginController implements Initializable{
 
     }
 
+    public static int getPlayer1ID(){
+        HistoryRecord[] records = HistoryFile.GetRecords();
+        for(int i = 0; i < records.length; i++){
+            if(records[i].Name.equals(PlayerOneName)){
+                return records[i].ID;
+            }
+        }
+        return PlayerOneID;
+    }
+    public static int getPlayer2ID(){
+        HistoryRecord[] records = HistoryFile.GetRecords();
+        for(int i = 0; i < records.length; i++){
+            if(records[i].Name.equals(PlayerTwoName)){
+                return records[i].ID;
+            }
+        }
+        return PlayerOneID;
+    }
+    public static String getPlayerOneName(){
+        return PlayerOneName;
+    }
+    public static String getPlayerTwoName(){
+        return PlayerTwoName;
+    }
 
     }

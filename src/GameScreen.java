@@ -18,10 +18,12 @@ public class GameScreen extends Application {
     public static final int HEIGHT = 8;
     private static Stage gameStage;
 
-    private Game game = new Game(1, 2);
+    private Game game;
+
 
     private Group tileGroup = new Group(); //separate Group for tiles and pieces so pieces are on top of tiles
     private Group pieceGroup = new Group();
+
 
 
 
@@ -30,6 +32,10 @@ public class GameScreen extends Application {
         Pane root = new Pane();
         root.setPrefSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
         root.getChildren().addAll(tileGroup, pieceGroup);
+
+
+        System.out.println("creating Game");
+       game = new Game(LoginController.getPlayer1ID(),LoginController.getPlayer2ID());
 
         this.DrawTiles();
         this.DrawPieces();
@@ -108,12 +114,14 @@ public class GameScreen extends Application {
                         this.DrawPieces();
 
                         HistoryRecord[] records = HistoryFile.GetRecords();
+                        System.out.println("Winner ID is: " + game._getWinnerUserID());
+                        System.out.println("Player 2 ID is: " + game._getPlayer2UserID());
 
                         if(game._getWinnerUserID() == game._getPlayer1UserID())
                         {
                             //Player 1 victory
                             HistoryFile.RecordWin(game._getPlayer1UserID());
-                            HistoryFile.RecordLoss(game._getPlayer1UserID());
+                            HistoryFile.RecordLoss(game._getPlayer2UserID());
                         }
                         else if(game._getWinnerUserID() == game._getPlayer2UserID())
                         {
@@ -172,7 +180,6 @@ public class GameScreen extends Application {
     public void start (Stage primaryStage) throws Exception {
         gameStage = primaryStage;
         gameStage.initStyle(StageStyle.UNDECORATED);
-        gameStage.setScene(new Scene(createContent(), 600, 400));
         changeScene("MainMenu.fxml");
         gameStage.show();
 

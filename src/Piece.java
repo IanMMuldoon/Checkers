@@ -12,6 +12,7 @@ public class Piece extends StackPane {
     public int _position;
     public boolean _isKing = false;
     public int x, y;
+    public int _playerUserID;
 
     public boolean _isDragging;
 

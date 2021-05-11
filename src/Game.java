@@ -3,7 +3,7 @@ import java.util.List;
 
 public class Game
 {
-    private boolean DEBUG = false;
+    private boolean DEBUG = true;
     public static final int TILE_SIZE = 100;
     public static final int WIDTH = 8;
     public static final int HEIGHT = 8;
@@ -21,12 +21,12 @@ public class Game
         this._player1UserID = player1userid;
         this._player2UserID = player2userid;
 
-        HistoryFile.SaveName("james");
-        HistoryFile.SaveName("Ian");
-        HistoryRecord[] records = HistoryFile.GetRecords();
+        //HistoryFile.SaveName("james");
+       // HistoryFile.SaveName("Ian");
+       // HistoryRecord[] records = HistoryFile.GetRecords();
 
-        HistoryFile.RecordWin(records[0].ID);
-        HistoryFile.RecordLoss(records[0].ID);
+      //  HistoryFile.RecordWin(records[0].ID);
+       // HistoryFile.RecordLoss(records[0].ID);
         this._reset();
     }
 
@@ -264,10 +264,17 @@ public class Game
 
         this._winnerUserID = 0;
 
-        if (player1inplay && !player2inplay)
+        if (player1inplay && !player2inplay) {
             this._winnerUserID = this._player1UserID;
-        else if (!player1inplay && player2inplay)
-            this._winnerUserID = this._player2UserID;
+            System.out.println("Player 1 win");
+        }
+        else if (!player1inplay && player2inplay) {
+        this._winnerUserID = this._player2UserID;
+        System.out.println("Player 2 win");
+    }
+        else{
+            System.out.println("no winner");
+        }
 
         gameover = this._winnerUserID > 0;
 
@@ -310,6 +317,8 @@ public class Game
 
                 if (gameover)
                     this._winnerUserID = this._currentPlayerID;
+                System.out.println("Is this what is setting it?");
+                System.out.println(this._winnerUserID);
             }
             catch(Exception e) { }
             finally
