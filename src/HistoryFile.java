@@ -137,7 +137,9 @@ public class HistoryFile
                 }
 
                 inputBuffer.append(line);
-                inputBuffer.append('\n');
+
+                if (file.ready())
+                    inputBuffer.append('\n');
             }
             file.close();
             String inputStr = inputBuffer.toString();
