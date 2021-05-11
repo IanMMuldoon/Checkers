@@ -476,22 +476,22 @@ public class Game
         this._pieces = newlist;
     }
     public void _proposedTakeback(){
-        Piece undoPiece;
-        Turn temp = this._moveHistory.get(this._moveHistory.size()-1);
-        undoPiece = this._getSquarePiece(temp._newRow, temp._newPosition);
-        undoPiece._row = temp._oldRow; //updates row of piece
-        undoPiece._position = temp._oldPosition; //updates position of piece to previous
+        if(this._totalMoves != 0){
+            Piece undoPiece;
+            Turn temp = this._moveHistory.get(this._moveHistory.size()-1);
+            undoPiece = this._getSquarePiece(temp._newRow, temp._newPosition);
+            undoPiece._row = temp._oldRow; //updates row of piece
+            undoPiece._position = temp._oldPosition; //updates position of piece to previous
 
-        this._totalMoves--;
+            this._totalMoves--;
 
-        this._moveHistory.remove(this._moveHistory.size()-1);
+            this._moveHistory.remove(this._moveHistory.size()-1);
 
-        if(this._capturedPiece != null){ //if piece was captured, add it back
-            this._addPiece(this._capturedPiece);
+            if(this._capturedPiece != null){ //if piece was captured, add it back
+                this._addPiece(this._capturedPiece);
+            }
+            this._toggleCurrentPlayer();
         }
-
-
-        this._toggleCurrentPlayer();
     }
 
 
