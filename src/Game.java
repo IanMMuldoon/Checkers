@@ -260,15 +260,10 @@ public class Game
 
         if (player1inplay && !player2inplay) {
             this._winnerUserID = this._player1UserID;
-            System.out.println("Player 1 win");
         }
         else if (!player1inplay && player2inplay) {
         this._winnerUserID = this._player2UserID;
-        System.out.println("Player 2 win");
     }
-        else{
-            System.out.println("no winner");
-        }
 
         gameover = this._winnerUserID > 0;
 

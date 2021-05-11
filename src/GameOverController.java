@@ -8,6 +8,7 @@ import javafx.scene.control.ListView;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.*;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 
@@ -18,7 +19,9 @@ import java.util.ResourceBundle;
 
 
 public class GameOverController {
-    private Game game = new Game(1,2);
+    @FXML
+    public Text WinnerName;
+
     private GameScreen gamescreen = new GameScreen();
     public Button rematchButton;
     public Button menuButton;
@@ -34,6 +37,9 @@ public class GameOverController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    public void changeText(String text){
+        WinnerName.setText(text);
     }
     public void handleQuitButton(){
 

@@ -27,6 +27,7 @@ public class GameScreen extends Application {
 
 
 
+
     public Parent createContent()
     {
         Pane root = new Pane();
@@ -34,7 +35,6 @@ public class GameScreen extends Application {
         root.getChildren().addAll(tileGroup, pieceGroup);
 
 
-        System.out.println("creating Game");
        game = new Game(LoginController.getPlayer1ID(),LoginController.getPlayer2ID());
 
         this.DrawTiles();
@@ -110,8 +110,6 @@ public class GameScreen extends Application {
 
 
                         HistoryRecord[] records = HistoryFile.GetRecords();
-                        System.out.println("Winner ID is: " + game._getWinnerUserID());
-                        System.out.println("Player 2 ID is: " + game._getPlayer2UserID());
 
                         if(game._getWinnerUserID() == game._getPlayer1UserID())
                         {
@@ -124,6 +122,7 @@ public class GameScreen extends Application {
                             //Player 2 victory
                             HistoryFile.RecordWin(game._getPlayer2UserID());
                             HistoryFile.RecordLoss(game._getPlayer1UserID());
+                          //  GameOverController
                         }
                         try {
                             changeScene("GameOver.fxml");
