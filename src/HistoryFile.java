@@ -35,6 +35,9 @@ public class HistoryFile
             while (inputStream.hasNextLine())
             {
                 String line = inputStream.nextLine();
+                /*if(line == ""){
+                    line = inputStream.nextLine();
+                }*/
                 String[] values = line.split("\t");
 
                 if (name.equals(values[1]))
@@ -134,7 +137,9 @@ public class HistoryFile
                 }
 
                 inputBuffer.append(line);
-                inputBuffer.append('\n');
+
+                if (file.ready())
+                    inputBuffer.append('\n');
             }
             file.close();
             String inputStr = inputBuffer.toString();

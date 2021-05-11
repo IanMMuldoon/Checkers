@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class GameScreen extends Application {
     public static final int TILE_SIZE = 100;
@@ -17,10 +18,13 @@ public class GameScreen extends Application {
     public static final int HEIGHT = 8;
     private static Stage gameStage;
 
-    private Game game = new Game(1, 2);
+    private Game game;
+
 
     private Group tileGroup = new Group(); //separate Group for tiles and pieces so pieces are on top of tiles
     private Group pieceGroup = new Group();
+
+
 
 
 
@@ -29,6 +33,9 @@ public class GameScreen extends Application {
         Pane root = new Pane();
         root.setPrefSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
         root.getChildren().addAll(tileGroup, pieceGroup);
+
+
+       game = new Game(LoginController.getPlayer1ID(),LoginController.getPlayer2ID());
 
         this.DrawTiles();
         this.DrawPieces();
@@ -100,11 +107,7 @@ public class GameScreen extends Application {
                     if (game.isGameOver())
                     {
 
-                        this._clearPieces();
 
-                        game._reset();
-
-                        this.DrawPieces();
 
                         HistoryRecord[] records = HistoryFile.GetRecords();
 
@@ -112,16 +115,19 @@ public class GameScreen extends Application {
                         {
                             //Player 1 victory
                             HistoryFile.RecordWin(game._getPlayer1UserID());
-                            HistoryFile.RecordLoss(game._getPlayer1UserID());
+                            HistoryFile.RecordLoss(game._getPlayer2UserID());
                         }
                         else if(game._getWinnerUserID() == game._getPlayer2UserID())
                         {
                             //Player 2 victory
                             HistoryFile.RecordWin(game._getPlayer2UserID());
                             HistoryFile.RecordLoss(game._getPlayer1UserID());
-                        }else
-                        {
-                            System.out.println("Nobody Won?");
+                          //  GameOverController
+                        }
+                        try {
+                            changeScene("GameOver.fxml");
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
                         }
                     }
 
@@ -170,8 +176,8 @@ public class GameScreen extends Application {
     @Override
     public void start (Stage primaryStage) throws Exception {
         gameStage = primaryStage;
-
-        changeScene("GameOver.fxml");
+        gameStage.initStyle(StageStyle.UNDECORATED);
+        changeScene("MainMenu.fxml");
         gameStage.show();
 
 
