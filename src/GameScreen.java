@@ -107,11 +107,7 @@ public class GameScreen extends Application {
                     if (game.isGameOver())
                     {
 
-                        this._clearPieces();
 
-                        game._reset();
-
-                        this.DrawPieces();
 
                         HistoryRecord[] records = HistoryFile.GetRecords();
                         System.out.println("Winner ID is: " + game._getWinnerUserID());
@@ -128,9 +124,11 @@ public class GameScreen extends Application {
                             //Player 2 victory
                             HistoryFile.RecordWin(game._getPlayer2UserID());
                             HistoryFile.RecordLoss(game._getPlayer1UserID());
-                        }else
-                        {
-                            System.out.println("Nobody Won?");
+                        }
+                        try {
+                            changeScene("GameOver.fxml");
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
                         }
                     }
 

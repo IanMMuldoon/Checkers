@@ -1,4 +1,2 @@
-1	Ian	0	0
-2	Colin	0	0
-3	Jeff	0	0
-4	Bob	0	0
+1	Ian	6	0
+2	Colin	0	6

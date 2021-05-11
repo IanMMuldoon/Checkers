@@ -21,12 +21,6 @@ public class Game
         this._player1UserID = player1userid;
         this._player2UserID = player2userid;
 
-        //HistoryFile.SaveName("james");
-       // HistoryFile.SaveName("Ian");
-       // HistoryRecord[] records = HistoryFile.GetRecords();
-
-      //  HistoryFile.RecordWin(records[0].ID);
-       // HistoryFile.RecordLoss(records[0].ID);
         this._reset();
     }
 
@@ -317,8 +311,6 @@ public class Game
 
                 if (gameover)
                     this._winnerUserID = this._currentPlayerID;
-                System.out.println("Is this what is setting it?");
-                System.out.println(this._winnerUserID);
             }
             catch(Exception e) { }
             finally

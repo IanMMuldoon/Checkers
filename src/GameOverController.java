@@ -26,9 +26,6 @@ public class GameOverController {
 
 
     public void handleReMatchButton(){
-        gamescreen._clearPieces();
-        game._reset();
-        gamescreen.DrawPieces();
         gamescreen.changeGameScene();
     }
     public void handleMenuButton(){
