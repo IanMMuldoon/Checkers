@@ -1,3 +1,5 @@
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.fxml.Initializable;
@@ -7,6 +9,8 @@ import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
+
+import java.io.IOException;
 import java.util.ResourceBundle;
 
 import java.io.File;
@@ -25,6 +29,8 @@ public class LoginController implements Initializable{
     @FXML
     private TextField PlayerTwo;
 
+    GameScreen gameScreen = new GameScreen();
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -34,8 +40,14 @@ public class LoginController implements Initializable{
     }
 
     public void backButtonAction(ActionEvent event) {
-        Stage stage = (Stage) backButton.getScene().getWindow();
-        stage.close();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("MainMenu.fxml"));
+            Stage stage = (Stage) backButton.getScene().getWindow();
+            Scene scene = new Scene(loader.load());
+            stage.setScene(scene);
+        }catch (IOException io){
+            io.printStackTrace();
+        }
     }
 
     public void playButtonAction(ActionEvent event) {
@@ -47,7 +59,13 @@ public class LoginController implements Initializable{
         }
         else if (PlayerTwo.getText().isBlank()){
             loginMessageLabel.setText("Please enter name for Player Two");
+        }else {
+            gameScreen.changeGameScene();
         }
+
+
+
+
 
     }
 
