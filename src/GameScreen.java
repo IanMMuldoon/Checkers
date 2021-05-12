@@ -31,6 +31,7 @@ public class GameScreen extends Application {
 
     public Parent createContent()
     {
+        game = new Game(LoginController.getPlayer1ID(), LoginController.getPlayer2ID());
         this.DrawTiles();
         this.DrawPieces();
 
@@ -87,7 +88,7 @@ public class GameScreen extends Application {
                     Position convert = Position.getPieceRP(newX, newY, 0);
 
                     if (!convert._isValid || !game._movePiece(piece, convert._row, convert._position)) {
-                        piece.move(x0, y0);
+                        piece.move(x0, y0); //Resets piece back to original position
                     }
                     else
                     {
@@ -142,6 +143,7 @@ public class GameScreen extends Application {
         HistoryRecord[] records = HistoryFile.GetRecords();
         HistoryFile.RecordLoss(game._getCurrentPlayerID());
 
+
         if(game._getCurrentPlayerID() == LoginController.getPlayer1ID()) {
             //Player 2 wins
             HistoryFile.RecordWin(LoginController.getPlayer2ID());
@@ -155,7 +157,7 @@ public class GameScreen extends Application {
 
         System.out.println("Current id: " + game._getCurrentPlayerID());
 
-        changeScene("GameOver.fxml");
+        //changeScene("GameOver.fxml");
     }
 
     public void DrawAsk (ActionEvent actionEvent) {

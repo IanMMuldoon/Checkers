@@ -1,2 +1,2 @@
-1	Ian	0	1
-2	Colin	1	0
+1	Ian	0	8
+2	Colin	8	0
