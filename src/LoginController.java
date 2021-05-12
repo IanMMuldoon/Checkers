@@ -36,6 +36,7 @@ public class LoginController implements Initializable{
     public static int PlayerTwoID;
 
     GameScreen gamescreen = new GameScreen();
+    public static Game game = new Game(LoginController.getPlayer1ID(), LoginController.getPlayer2ID());
 
 
 
@@ -73,6 +74,7 @@ public class LoginController implements Initializable{
           HistoryFile.SaveName(PlayerTwo.getText());
           PlayerOneName = PlayerOne.getText();
           PlayerTwoName = PlayerTwo.getText();
+          gamescreen._clearPieces();
           gamescreen.changeGameScene();
 
         }

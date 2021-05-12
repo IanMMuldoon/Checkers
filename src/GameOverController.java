@@ -24,8 +24,6 @@ public class GameOverController implements Initializable{
     @FXML
     public Text WinnerName;
 
-    //private GameScreen gamescreen = new GameScreen();
-    //private Game game = new Game(LoginController.getPlayer1ID(),LoginController.getPlayer2ID());
     public Button rematchButton;
     public Button menuButton;
     public Button quitButton;

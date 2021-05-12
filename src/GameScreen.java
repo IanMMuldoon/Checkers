@@ -22,7 +22,6 @@ public class GameScreen extends Application {
 
     public static String Winner;
 
-    private Game game = new Game(LoginController.getPlayer1ID(), LoginController.getPlayer2ID());
 
     private static Group tileGroup = new Group(); //separate Group for tiles and pieces so pieces are on top of tiles
     private static Group pieceGroup = new Group(); //Is there a problem if these are static?
@@ -31,7 +30,7 @@ public class GameScreen extends Application {
 
     public Parent createContent()
     {
-        game = new Game(LoginController.getPlayer1ID(), LoginController.getPlayer2ID());
+        LoginController.game = new Game(LoginController.getPlayer1ID(), LoginController.getPlayer2ID());
         this.DrawTiles();
         this.DrawPieces();
 
@@ -43,27 +42,27 @@ public class GameScreen extends Application {
             for (int x = 0; x < WIDTH; x++) {
                 Tile tile = new Tile((x + y) % 2 == 0, x, y); //If the sum or the coordinates is even then the tile is light
 
-                game.board[x][y] = tile;
+                LoginController.game.board[x][y] = tile;
 
                 tileGroup.getChildren().add(tile);
-                for (int i = 0; i < game._pieces.length; i++) {
-                    tile.setPiece(game._pieces[i]);
+                for (int i = 0; i < LoginController.game._pieces.length; i++) {
+                    tile.setPiece(LoginController.game._pieces[i]);
                 }
             }
         }
     }
 
     public void DrawPieces() {
-        for (int i = 0; i < game._pieces.length; i++) {
-            if (game._pieces[i] != null) {
-                game._pieces[i].CreateCircle();
+        for (int i = 0; i < LoginController.game._pieces.length; i++) {
+            if (LoginController.game._pieces[i] != null) {
+                LoginController.game._pieces[i].CreateCircle();
 
                 //Make copy of iterator to pass to event
-                Piece piece = game._pieces[i];
+                Piece piece = LoginController.game._pieces[i];
 
-                game._pieces[i].setOnMousePressed(e ->
+                LoginController.game._pieces[i].setOnMousePressed(e ->
                 {
-                    piece._isDragging = (piece._playerID == game._getCurrentPlayerID());
+                    piece._isDragging = (piece._playerID == LoginController.game._getCurrentPlayerID());
                     if (piece._isDragging) {
 
                         piece.mouseX = e.getSceneX();
@@ -71,7 +70,7 @@ public class GameScreen extends Application {
                     }
                 });
 
-                game._pieces[i].setOnMouseDragged(e ->
+                LoginController.game._pieces[i].setOnMouseDragged(e ->
                 {
                     if (piece._isDragging)
                         piece.relocate(e.getSceneX() - piece.mouseX + piece.oldX, e.getSceneY() - piece.mouseY + piece.oldY);
@@ -87,35 +86,35 @@ public class GameScreen extends Application {
 
                     Position convert = Position.getPieceRP(newX, newY, 0);
 
-                    if (!convert._isValid || !game._movePiece(piece, convert._row, convert._position)) {
+                    if (!convert._isValid || !LoginController.game._movePiece(piece, convert._row, convert._position)) {
                         piece.move(x0, y0); //Resets piece back to original position
                     }
                     else
                     {
                         this._removeMissingPieces();
                     }
-                    game._kingPiece(piece);
+                    LoginController.game._kingPiece(piece);
                     if(piece._isKing){
                         piece.CreateCircle();
                     }
 
-                    if (game.isGameOver())
+                    if (LoginController.game.isGameOver())
                     {
                         GameOverController gameovercontroller = new GameOverController();
                         HistoryRecord[] records = HistoryFile.GetRecords();
 
-                        if(game._getWinnerUserID() == game._getPlayer1UserID())
+                        if(LoginController.game._getWinnerUserID() == LoginController.game._getPlayer1UserID())
                         {
                             //Player 1 victory
-                            HistoryFile.RecordWin(game._getPlayer1UserID());
-                            HistoryFile.RecordLoss(game._getPlayer2UserID());
+                            HistoryFile.RecordWin(LoginController.game._getPlayer1UserID());
+                            HistoryFile.RecordLoss(LoginController.game._getPlayer2UserID());
                             Winner = LoginController.getPlayerOneName();
                         }
-                        else if(game._getWinnerUserID() == game._getPlayer2UserID())
+                        else if(LoginController.game._getWinnerUserID() == LoginController.game._getPlayer2UserID())
                         {
                             //Player 2 victory
-                            HistoryFile.RecordWin(game._getPlayer2UserID());
-                            HistoryFile.RecordLoss(game._getPlayer1UserID());
+                            HistoryFile.RecordWin(LoginController.game._getPlayer2UserID());
+                            HistoryFile.RecordLoss(LoginController.game._getPlayer1UserID());
                             Winner = LoginController.getPlayerTwoName();
                             //
                         }
@@ -129,7 +128,7 @@ public class GameScreen extends Application {
 
                 try
                 {
-                    pieceGroup.getChildren().add(game._pieces[i]);
+                    pieceGroup.getChildren().add(LoginController.game._pieces[i]);
                 }
                 catch (Exception ex)
                 {
@@ -140,24 +139,20 @@ public class GameScreen extends Application {
     }
 
     public void Forfeit (ActionEvent actionEvent) throws IOException {
-        HistoryRecord[] records = HistoryFile.GetRecords();
-        HistoryFile.RecordLoss(game._getCurrentPlayerID());
+        HistoryFile.RecordLoss(LoginController.game._getCurrentPlayerID());
 
-
-        if(game._getCurrentPlayerID() == LoginController.getPlayer1ID()) {
+        if(LoginController.game._getCurrentPlayerID() == LoginController.getPlayer1ID()) {
             //Player 2 wins
             HistoryFile.RecordWin(LoginController.getPlayer2ID());
             Winner = LoginController.getPlayerTwoName();
         }
-        else if(game._getCurrentPlayerID() == LoginController.getPlayer2ID()) {
+        else if(LoginController.game._getCurrentPlayerID() == LoginController.getPlayer2ID()) {
             //Player 1 wins
             HistoryFile.RecordWin(LoginController.getPlayer1ID());
             Winner = LoginController.getPlayerOneName();
         }
 
-        System.out.println("Current id: " + game._getCurrentPlayerID());
-
-        //changeScene("GameOver.fxml");
+        changeScene("GameOver.fxml");
     }
 
     public void DrawAsk (ActionEvent actionEvent) {
@@ -165,12 +160,13 @@ public class GameScreen extends Application {
     }
     
     public void ReturnToMenu (ActionEvent actionEvent) throws IOException {
-        game._reset();
+        LoginController.game._reset();
         changeScene("MainMenu.fxml");
     }
 
     public void YesDraw (ActionEvent actionEvent) throws IOException {
-        game._reset();
+        LoginController.game._reset();
+        Winner = "Nobody";
         changeScene("GameOver.fxml");
     }
 
@@ -180,7 +176,7 @@ public class GameScreen extends Application {
 
     private void _removeMissingPieces()
     {
-        List<Piece> pieces = new ArrayList<>(Arrays.asList(game._pieces));
+        List<Piece> pieces = new ArrayList<>(Arrays.asList(LoginController.game._pieces));
 
         for (int i = 0; i < this.pieceGroup.getChildren().stream().count(); i++)
         {
@@ -189,7 +185,7 @@ public class GameScreen extends Application {
                 Node node  = this.pieceGroup.getChildren().get(i);
 
                 //If the child object is a Piece and it is not in the Game Piece collection, remove it
-                if (node instanceof Piece && !Arrays.stream(game._pieces).anyMatch(p -> p == (Piece) node))
+                if (node instanceof Piece && !Arrays.stream(LoginController.game._pieces).anyMatch(p -> p == (Piece) node))
                 {
                     this.pieceGroup.getChildren().remove(node);
                 }
