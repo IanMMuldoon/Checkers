@@ -14,6 +14,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import javax.swing.*;
+
 public class GameScreen extends Application {
     public static final int TILE_SIZE = 100;
     public static final int WIDTH = 8;
@@ -139,6 +141,10 @@ public class GameScreen extends Application {
     }
 
     public void Forfeit (ActionEvent actionEvent) throws IOException {
+        gameStage.setScene(new Scene(changeSideScene("ForfeitMessage.fxml")));
+    }
+
+    public void YesForfeit (ActionEvent actionEvent) throws IOException {
         HistoryFile.RecordLoss(LoginController.game._getCurrentPlayerID());
 
         if(LoginController.game._getCurrentPlayerID() == LoginController.getPlayer1ID()) {
@@ -153,6 +159,10 @@ public class GameScreen extends Application {
         }
 
         changeScene("GameOver.fxml");
+    }
+
+    public void NoForfeit (ActionEvent actionEvent) {
+        gameStage.setScene(new Scene(changeSideScene("SideMenu.fxml")));
     }
 
     public void DrawAsk (ActionEvent actionEvent) {

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="200.0" style="-fx-background-color: #e2b08c;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameScreen">
+    <children>
+        <Text layoutX="25.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Are you sure you want to forfeit?" textAlignment="CENTER" wrappingWidth="150.0">
+         <font>
+            <Font name="Comic Sans MS" size="14.0" />
+         </font></Text>
+        <Button fx:id="YesForfeit" alignment="CENTER" contentDisplay="CENTER" layoutX="25.0" layoutY="300.0" mnemonicParsing="false" onAction="#YesForfeit" text="Yes">
+         <font>
+            <Font name="Comic Sans MS" size="14.0" />
+         </font></Button>
+        <Button fx:id="NoForfeit" alignment="CENTER" contentDisplay="CENTER" layoutX="136.0" layoutY="300.0" mnemonicParsing="false" onAction="#NoForfeit" text="No">
+         <font>
+            <Font name="Comic Sans MS" size="14.0" />
+         </font></Button>
+    </children>
+</Pane>
