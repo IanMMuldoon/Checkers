@@ -18,6 +18,11 @@
             <Button fx:id="rematchButton" mnemonicParsing="false" onAction="#handleReMatchButton" prefHeight="25.0" prefWidth="110.0" text="Rematch" translateY="100.0" />
             <Button fx:id="menuButton" mnemonicParsing="false" onAction="#handleMenuButton" prefHeight="25.0" prefWidth="110.0" text="Main Menu" translateY="150.0" />
             <Button fx:id="quitButton" mnemonicParsing="false" onAction="#handleQuitButton" prefHeight="25.0" prefWidth="110.0" text="Quit" translateY="200.0" />
+            <Text fx:id="WinnerName" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" translateY="-35.0">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Text>
          </children>
       </VBox>
    </children>

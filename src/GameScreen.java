@@ -24,7 +24,7 @@ public class GameScreen extends Application {
     private Group tileGroup = new Group(); //separate Group for tiles and pieces so pieces are on top of tiles
     private Group pieceGroup = new Group();
 
-
+    public static String Winner;
 
 
 
@@ -106,9 +106,7 @@ public class GameScreen extends Application {
 
                     if (game.isGameOver())
                     {
-
-
-
+                        GameOverController gameovercontroller = new GameOverController();
                         HistoryRecord[] records = HistoryFile.GetRecords();
 
                         if(game._getWinnerUserID() == game._getPlayer1UserID())
@@ -116,13 +114,15 @@ public class GameScreen extends Application {
                             //Player 1 victory
                             HistoryFile.RecordWin(game._getPlayer1UserID());
                             HistoryFile.RecordLoss(game._getPlayer2UserID());
+                            Winner = LoginController.getPlayerOneName();
                         }
                         else if(game._getWinnerUserID() == game._getPlayer2UserID())
                         {
                             //Player 2 victory
                             HistoryFile.RecordWin(game._getPlayer2UserID());
                             HistoryFile.RecordLoss(game._getPlayer1UserID());
-                          //  GameOverController
+                            Winner = LoginController.getPlayerTwoName();
+                          //
                         }
                         try {
                             changeScene("GameOver.fxml");
@@ -176,7 +176,6 @@ public class GameScreen extends Application {
     @Override
     public void start (Stage primaryStage) throws Exception {
         gameStage = primaryStage;
-        gameStage.initStyle(StageStyle.UNDECORATED);
         changeScene("MainMenu.fxml");
         gameStage.show();
 

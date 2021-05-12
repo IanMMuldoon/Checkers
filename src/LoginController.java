@@ -77,8 +77,6 @@ public class LoginController implements Initializable{
 
         }
 
-        
-
     }
 
     public static int getPlayer1ID(){
