@@ -20,6 +20,8 @@ public class GameScreen extends Application {
     public static final int HEIGHT = 8;
     private static Stage gameStage;
 
+    public static String Winner;
+
     private Game game = new Game(1, 2);
 
     private static Group tileGroup = new Group(); //separate Group for tiles and pieces so pieces are on top of tiles
@@ -110,12 +112,14 @@ public class GameScreen extends Application {
                         if(game._getWinnerUserID() == game._getPlayer1UserID())
                         {
                             //Player 1 victory
+                            Winner = LoginController.getPlayerOneName();
                             HistoryFile.RecordWin(game._getPlayer1UserID());
                             HistoryFile.RecordLoss(game._getPlayer1UserID());
                         }
                         else if(game._getWinnerUserID() == game._getPlayer2UserID())
                         {
                             //Player 2 victory
+                            Winner = LoginController.getPlayerTwoName();
                             HistoryFile.RecordWin(game._getPlayer2UserID());
                             HistoryFile.RecordLoss(game._getPlayer1UserID());
                         }else
@@ -138,30 +142,6 @@ public class GameScreen extends Application {
     }
 
     public void Forfeit (ActionEvent actionEvent) throws IOException {
-        BorderPane root = new BorderPane();
-        Pane board = new Pane();
-        Pane sidePane = null;
-        Text Message = null;
-        try {
-            sidePane = FXMLLoader.load(getClass().getResource("ForfeitMessage.fxml"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        board.setPrefSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
-        board.getChildren().addAll(tileGroup, pieceGroup);
-
-        Message = (Text) sidePane.getChildren().get(0);
-
-        Message.setText("Player " + game._getCurrentPlayerID() + " has forfeit!"); //This is always returning player 1
-
-        root.setCenter(board);
-        root.setLeft(sidePane);
-
-        gameStage.setScene(new Scene(root));
-    }
-
-    public void ForfeitReturnToMenu (ActionEvent actionEvent) throws IOException {
-        game._reset();
         changeScene("GameOver.fxml");
     }
 
