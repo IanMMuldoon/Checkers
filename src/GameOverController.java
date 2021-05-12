@@ -8,38 +8,45 @@ import javafx.scene.control.ListView;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.*;
+import javafx.scene.image.Image;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 
 
-public class GameOverController {
+public class GameOverController implements Initializable{
     @FXML
     public Text WinnerName;
 
-    private GameScreen gamescreen = new GameScreen();
+    //private GameScreen gamescreen = new GameScreen();
+    //private Game game = new Game(LoginController.getPlayer1ID(),LoginController.getPlayer2ID());
     public Button rematchButton;
     public Button menuButton;
     public Button quitButton;
 
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        WinnerName.setText(GameScreen.Winner + " Wins!");
+    }
+
     public void handleReMatchButton(){
+        GameScreen gamescreen = new GameScreen();
         gamescreen.changeGameScene();
     }
     public void handleMenuButton(){
+        GameScreen gamescreen = new GameScreen();
         try {
             gamescreen.changeScene("MainMenu.fxml");
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-    public void changeText(String text){
-        WinnerName.setText(text);
     }
     public void handleQuitButton(){
 
