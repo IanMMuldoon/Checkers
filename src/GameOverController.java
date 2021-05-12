@@ -38,6 +38,7 @@ public class GameOverController implements Initializable{
 
     public void handleReMatchButton(){
         GameScreen gamescreen = new GameScreen();
+        gamescreen._clearPieces();
         gamescreen.changeGameScene();
     }
     public void handleMenuButton(){

@@ -22,7 +22,7 @@ public class GameScreen extends Application {
 
     public static String Winner;
 
-    private Game game = new Game(1, 2);
+    private Game game = new Game(LoginController.getPlayer1ID(), LoginController.getPlayer2ID());
 
     private static Group tileGroup = new Group(); //separate Group for tiles and pieces so pieces are on top of tiles
     private static Group pieceGroup = new Group(); //Is there a problem if these are static?
@@ -100,31 +100,28 @@ public class GameScreen extends Application {
 
                     if (game.isGameOver())
                     {
-
-                        this._clearPieces();
-
-                        game._reset();
-
-                        this.DrawPieces();
-
+                        GameOverController gameovercontroller = new GameOverController();
                         HistoryRecord[] records = HistoryFile.GetRecords();
 
                         if(game._getWinnerUserID() == game._getPlayer1UserID())
                         {
                             //Player 1 victory
-                            Winner = LoginController.getPlayerOneName();
                             HistoryFile.RecordWin(game._getPlayer1UserID());
-                            HistoryFile.RecordLoss(game._getPlayer1UserID());
+                            HistoryFile.RecordLoss(game._getPlayer2UserID());
+                            Winner = LoginController.getPlayerOneName();
                         }
                         else if(game._getWinnerUserID() == game._getPlayer2UserID())
                         {
                             //Player 2 victory
-                            Winner = LoginController.getPlayerTwoName();
                             HistoryFile.RecordWin(game._getPlayer2UserID());
                             HistoryFile.RecordLoss(game._getPlayer1UserID());
-                        }else
-                        {
-                            System.out.println("Nobody Won?");
+                            Winner = LoginController.getPlayerTwoName();
+                            //
+                        }
+                        try {
+                            changeScene("GameOver.fxml");
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
                         }
                     }
                 });
@@ -142,6 +139,22 @@ public class GameScreen extends Application {
     }
 
     public void Forfeit (ActionEvent actionEvent) throws IOException {
+        HistoryRecord[] records = HistoryFile.GetRecords();
+        HistoryFile.RecordLoss(game._getCurrentPlayerID());
+
+        if(game._getCurrentPlayerID() == LoginController.getPlayer1ID()) {
+            //Player 2 wins
+            HistoryFile.RecordWin(LoginController.getPlayer2ID());
+            Winner = LoginController.getPlayerTwoName();
+        }
+        else if(game._getCurrentPlayerID() == LoginController.getPlayer2ID()) {
+            //Player 1 wins
+            HistoryFile.RecordWin(LoginController.getPlayer1ID());
+            Winner = LoginController.getPlayerOneName();
+        }
+
+        System.out.println("Current id: " + game._getCurrentPlayerID());
+
         changeScene("GameOver.fxml");
     }
 

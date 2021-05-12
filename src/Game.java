@@ -403,7 +403,6 @@ public class Game
 
             if (!this._mustJumpAgain)
                 this._toggleCurrentPlayer();
-
             moved = true;
         }
 
