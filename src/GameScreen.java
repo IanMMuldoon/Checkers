@@ -100,13 +100,6 @@ public class GameScreen extends Application {
 
                     if (game.isGameOver())
                     {
-
-                        this._clearPieces();
-
-                        game._reset();
-
-                        this.DrawPieces();
-
                         HistoryRecord[] records = HistoryFile.GetRecords();
 
                         if(game._getWinnerUserID() == game._getPlayer1UserID())
