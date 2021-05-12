@@ -10,11 +10,7 @@ import javafx.scene.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-
-import javax.swing.*;
 
 public class GameScreen extends Application {
     public static final int TILE_SIZE = 100;
@@ -141,7 +137,7 @@ public class GameScreen extends Application {
     }
 
     public void Forfeit (ActionEvent actionEvent) throws IOException {
-        gameStage.setScene(new Scene(changeSideScene("ForfeitMessage.fxml")));
+        gameStage.setScene(new Scene(changeSideScene("ForfeitPrompt.fxml")));
     }
 
     public void YesForfeit (ActionEvent actionEvent) throws IOException {
@@ -170,9 +166,16 @@ public class GameScreen extends Application {
     }
     
     public void ReturnToMenu (ActionEvent actionEvent) throws IOException {
+        gameStage.setScene(new Scene(changeSideScene("ReturnMainMenuPrompt.fxml")));
+    }
+
+    public void YesReturnToMenu (ActionEvent actionEvent) throws IOException {
         LoginController.game._reset();
         changeScene("MainMenu.fxml");
     }
+
+    public void NoReturnToMenu (ActionEvent actionEvent) throws IOException {
+        gameStage.setScene(new Scene(changeSideScene("SideMenu.fxml")));    }
 
     public void YesDraw (ActionEvent actionEvent) throws IOException {
         LoginController.game._reset();
