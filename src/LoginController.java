@@ -62,12 +62,5 @@ public class LoginController implements Initializable{
         }else {
             gameScreen.changeGameScene();
         }
-
-
-
-
-
     }
-
-
-    }
+}

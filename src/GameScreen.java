@@ -137,11 +137,7 @@ public class GameScreen extends Application {
         }
     }
 
-    public void takeBack (ActionEvent actionEvent) {
-        gameStage.setScene(new Scene(changeSideScene("TakeBackPrompt.fxml")));
-    }
-
-    public void forfeit (ActionEvent actionEvent) throws IOException {
+    public void Forfeit (ActionEvent actionEvent) throws IOException {
         BorderPane root = new BorderPane();
         Pane board = new Pane();
         Pane sidePane = null;
@@ -164,26 +160,18 @@ public class GameScreen extends Application {
         gameStage.setScene(new Scene(root));
     }
 
-    public void ForfeitRetMenu (ActionEvent actionEvent) throws IOException {
+    public void ForfeitReturnToMenu (ActionEvent actionEvent) throws IOException {
         game._reset();
         changeScene("GameOver.fxml");
     }
 
-    public void draw (ActionEvent actionEvent) {
+    public void DrawAsk (ActionEvent actionEvent) {
         gameStage.setScene(new Scene(changeSideScene("DrawGamePrompt.fxml")));
     }
     
-    public void retMenu (ActionEvent actionEvent) throws IOException {
+    public void ReturnToMenu (ActionEvent actionEvent) throws IOException {
         game._reset();
         changeScene("MainMenu.fxml");
-    }
-
-    public void YesTakeBack (ActionEvent actionEvent) {
-        gameStage.setScene(new Scene(changeSideScene("SideMenu.fxml")));
-    }
-
-    public void NoTakeBack (ActionEvent actionEvent) {
-        gameStage.setScene(new Scene(changeSideScene("SideMenu.fxml")));
     }
 
     public void YesDraw (ActionEvent actionEvent) throws IOException {

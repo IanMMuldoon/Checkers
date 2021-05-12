@@ -6,15 +6,15 @@
 
 <Pane prefHeight="800" prefWidth="200" style="-fx-background-color: #e2b08c" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameScreen">
    <children>
-      <Button fx:id="forfeit" alignment="CENTER" contentDisplay="CENTER" layoutX="66.0" layoutY="300.0" mnemonicParsing="false" onAction="#forfeit" text="Forfeit">
+      <Button fx:id="forfeit" alignment="CENTER" contentDisplay="CENTER" layoutX="66.0" layoutY="300.0" mnemonicParsing="false" onAction="#Forfeit" text="Forfeit">
          <font>
             <Font name="Comic Sans MS" size="14.0" />
          </font></Button>
-      <Button fx:id="draw" alignment="CENTER" contentDisplay="CENTER" layoutX="72.0" layoutY="200.0" mnemonicParsing="false" onAction="#draw" text="Draw">
+      <Button fx:id="draw" alignment="CENTER" contentDisplay="CENTER" layoutX="72.0" layoutY="200.0" mnemonicParsing="false" onAction="#DrawAsk" text="Draw">
          <font>
             <Font name="Comic Sans MS" size="14.0" />
          </font></Button>
-      <Button fx:id="retMenu" alignment="CENTER" contentDisplay="CENTER" layoutX="39.0" layoutY="400.0" mnemonicParsing="false" onAction="#retMenu" text="Return to Menu">
+      <Button fx:id="retMenu" alignment="CENTER" contentDisplay="CENTER" layoutX="39.0" layoutY="400.0" mnemonicParsing="false" onAction="#ReturnToMenu" text="Return to Menu">
          <font>
             <Font name="Comic Sans MS" size="14.0" />
          </font></Button>

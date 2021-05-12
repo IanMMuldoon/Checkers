@@ -15,8 +15,6 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-
-
 public class GameOverController {
     private Game game = new Game(1,2);
     private GameScreen gamescreen = new GameScreen();
@@ -25,20 +23,18 @@ public class GameOverController {
     public Button menuButton;
     public Button quitButton;
 
-
     public void handleReMatchButton(){
         gamescreen._clearPieces();
         game._reset();
         gamescreen.DrawPieces();
         gamescreen.changeGameScene();
     }
+
     public void handleMenuButton(){
 
     }
-    public void handleQuitButton(){
 
+    public void handleQuitButton(){
         System.exit(0);
     }
-
-    }
-
+}
