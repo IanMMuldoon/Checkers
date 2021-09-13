@@ -10,7 +10,4 @@ Type: Computer Application
 
 This app includes:
 
-User database that records win/loss ratio
-Matches with forefit, Draw, Return to Menu
-
 [Demo](https://youtu.be/XKCS_bpWh8s)
