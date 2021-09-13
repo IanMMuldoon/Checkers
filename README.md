@@ -13,6 +13,6 @@ This app includes:
 User database that records win/loss ratio
 Matches with forefit, Draw, Return to Menu
 
-[https://youtu.be/XKCS_bpWh8s](# Demo)
+[# Demo](https://youtu.be/XKCS_bpWh8s)
 
 
