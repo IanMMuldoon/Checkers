@@ -8,6 +8,4 @@ GUI: JavaFX
 Database: txt document  
 Type: Computer Application  
 
-This app includes:
-
 [Demo](https://youtu.be/XKCS_bpWh8s)
