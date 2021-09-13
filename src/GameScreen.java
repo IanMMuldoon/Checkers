@@ -1,22 +1,32 @@
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class GameScreen extends Application {
+public class GameScreen extends Application implements Initializable {
     public static final int TILE_SIZE = 100;
     public static final int WIDTH = 8;
     public static final int HEIGHT = 8;
     private static Stage gameStage;
+    public Text playertwoname;
+    public Text playeronename;
+
+
 
     public static String Winner;
 
@@ -134,6 +144,14 @@ public class GameScreen extends Application {
                 }
             }
         }
+    }
+
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        if(playeronename == null || playertwoname == null){
+            return;
+        }
+        playeronename.setText(LoginController.getPlayerOneName());
+        playertwoname.setText(LoginController.getPlayerTwoName());
     }
 
     public void Forfeit (ActionEvent actionEvent) throws IOException {
